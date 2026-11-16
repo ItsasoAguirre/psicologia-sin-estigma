@@ -8,7 +8,11 @@ export function spotify(url = '') {
 
 /** Primeras palabras de un texto (sin formato) para los pósits de reseñas. */
 export function extracto(texto = '', max = 90) {
-  const limpio = String(texto ?? '').replace(/[*_#>\[\]]/g, '').replace(/\s+/g, ' ').trim();
+  const limpio = String(texto ?? '')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1') // [texto](enlace) → texto
+    .replace(/[*_#>\[\]]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
   return limpio.length > max ? limpio.slice(0, max).replace(/\s\S*$/, '') + '…' : limpio;
 }
 

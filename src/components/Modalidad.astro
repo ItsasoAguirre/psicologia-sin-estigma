@@ -4,14 +4,14 @@ interface Props { titulo: string; opciones: { icono: string; texto: string }[]; 
 const { titulo, opciones = [], nota } = Astro.props;
 ---
 <div class="modalidad">
-  <h3>{titulo}</h3>
+  <h2 class="modalidad__titulo">{titulo}</h2>
   <ul>
     {opciones.map((o) => <li><span class="modalidad__ic"><Icono nombre={o.icono} /></span>{o.texto}</li>)}
   </ul>
   {nota && <p class="modalidad__nota">{nota}</p>}
 </div>
 <style>
-  .modalidad h3 { margin-top: 0; }
+  .modalidad__titulo { margin-top: 0; font-size: 1.25rem; }
   ul { list-style: none; padding: 0; margin: 0; display: grid; gap: .75rem; }
   li { display: flex; gap: .75rem; align-items: center; }
   .modalidad__ic { flex: none; width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: var(--lila-100); color: var(--morado-700); }

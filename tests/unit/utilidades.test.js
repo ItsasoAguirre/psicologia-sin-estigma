@@ -25,6 +25,9 @@ describe('extracto', () => {
     expect(r.length).toBeLessThanOrEqual(21);
   });
   it('quita el formato markdown', () => expect(extracto('**Muy** _bien_')).toBe('Muy bien'));
+  it('deja solo el texto de los enlaces', () => {
+    expect(extracto('Escríbenos a [mi correo](mailto:a@b.es) ya')).toBe('Escríbenos a mi correo ya');
+  });
 });
 
 describe('analizarBrevo', () => {

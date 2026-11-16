@@ -32,6 +32,7 @@ export function validar(op = {}) {
     const w = campo.widget ?? 'string';
     if (vacio(valor)) {
       if (campo.required !== false && w !== 'boolean') errores.push(`${etiqueta} está vacío y es obligatorio.`);
+      if (campo.name === 'transcripcion') avisos.push(`${etiqueta} está vacía: las personas ciegas no podrán leer esa reseña.`);
       return;
     }
     switch (w) {

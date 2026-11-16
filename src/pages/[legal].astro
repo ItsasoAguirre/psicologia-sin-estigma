@@ -6,7 +6,7 @@ export function getStaticPaths() {
 }
 const p = pagina(Astro.params.legal);
 ---
-<Base titulo={p.titulo}>
+<Base titulo={p.titulo} descripcion={p.descripcion_seo || p.cuerpo}>
   <section class="seccion">
     <div class="contenedor estrecho">
       <h1>{p.titulo}</h1>

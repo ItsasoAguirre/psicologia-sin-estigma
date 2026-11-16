@@ -36,22 +36,55 @@
     {
       "titulo": "2026",
       "imagenes": [
-        "/uploads/resenas-retiros/2026-1.jpg",
-        "/uploads/resenas-retiros/2026-2.jpg",
-        "/uploads/resenas-retiros/2026-3.jpg",
-        "/uploads/resenas-retiros/2026-4.jpg",
-        "/uploads/resenas-retiros/2026-5.jpg"
+        {
+          "imagen": "/uploads/resenas-retiros/2026-1.jpg",
+          "transcripcion": ""
+        },
+        {
+          "imagen": "/uploads/resenas-retiros/2026-2.jpg",
+          "transcripcion": ""
+        },
+        {
+          "imagen": "/uploads/resenas-retiros/2026-3.jpg",
+          "transcripcion": ""
+        },
+        {
+          "imagen": "/uploads/resenas-retiros/2026-4.jpg",
+          "transcripcion": ""
+        },
+        {
+          "imagen": "/uploads/resenas-retiros/2026-5.jpg",
+          "transcripcion": ""
+        }
       ]
     },
     {
       "titulo": "2024",
       "imagenes": [
-        "/uploads/resenas-retiros/2024-1.jpg",
-        "/uploads/resenas-retiros/2024-2.jpg",
-        "/uploads/resenas-retiros/2024-3.jpg",
-        "/uploads/resenas-retiros/2024-4.jpg",
-        "/uploads/resenas-retiros/2024-5.jpg",
-        "/uploads/resenas-retiros/2024-6.jpg"
+        {
+          "imagen": "/uploads/resenas-retiros/2024-1.jpg",
+          "transcripcion": ""
+        },
+        {
+          "imagen": "/uploads/resenas-retiros/2024-2.jpg",
+          "transcripcion": ""
+        },
+        {
+          "imagen": "/uploads/resenas-retiros/2024-3.jpg",
+          "transcripcion": ""
+        },
+        {
+          "imagen": "/uploads/resenas-retiros/2024-4.jpg",
+          "transcripcion": ""
+        },
+        {
+          "imagen": "/uploads/resenas-retiros/2024-5.jpg",
+          "transcripcion": ""
+        },
+        {
+          "imagen": "/uploads/resenas-retiros/2024-6.jpg",
+          "transcripcion": ""
+        }
       ]
     }
   ],

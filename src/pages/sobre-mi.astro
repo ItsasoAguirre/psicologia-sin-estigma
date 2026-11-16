@@ -4,7 +4,7 @@ import { pagina, ajustes, md } from '../lib/datos.js';
 const p = pagina('sobre-mi');
 const f = p.formacion;
 ---
-<Base titulo={p.titulo}>
+<Base titulo={p.titulo} descripcion={p.descripcion_seo || p.personal}>
   <section class="seccion">
     <div class="contenedor sobre">
       <div class="sobre__foto">

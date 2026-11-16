@@ -5,7 +5,7 @@ import { pagina, md } from '../../lib/datos.js';
 const p = pagina('retiros');
 const fotos: string[] = p.fotos ?? [];
 ---
-<Base titulo={p.titulo}>
+<Base titulo={p.titulo} descripcion={p.descripcion_seo || p.tipos?.[0]?.texto}>
   <section class="portada">
     <img src={p.imagen} alt={p.titulo} width="2000" height="1125" />
   </section>
@@ -39,7 +39,7 @@ const fotos: string[] = p.fotos ?? [];
               <button data-ant aria-label="Foto anterior"><Icono nombre="izquierda" /></button>
               <button data-pausa aria-label="Pausar"><Icono nombre="pausa" class="ic-pausa" /><Icono nombre="play" class="ic-play" /></button>
               <button data-sig aria-label="Foto siguiente"><Icono nombre="derecha" /></button>
-              <span class="carrusel__contador" aria-live="polite"><span data-n>1</span> / {fotos.length}</span>
+              <span class="carrusel__contador" aria-live="off"><span data-n>1</span> / {fotos.length}</span>
             </div>
           </div>
         )}
@@ -50,9 +50,11 @@ const fotos: string[] = p.fotos ?? [];
           <div class="grupo">
             <h3>{g.titulo}</h3>
             <ul class="miniaturas">
-              {g.imagenes.map((img, i) => (
-                <li><button data-ampliar={img} aria-label={`Ver reseña ${i + 1} de ${g.titulo}`}><img src={img} alt="" loading="lazy" width="300" height="400" /></button></li>
-              ))}
+              {g.imagenes.map((r, i) => {
+                // Las reseñas son fotos de notas escritas a mano: la transcripción es su texto alternativo.
+                const alt = r.transcripcion?.trim() ? `Reseña escrita a mano: «${r.transcripcion.trim()}»` : `Reseña escrita a mano ${i + 1} de ${g.titulo}`;
+                return <li><button data-ampliar={r.imagen} data-alt={alt} aria-label={`Ampliar. ${alt}`}><img src={r.imagen} alt="" loading="lazy" width="300" height="400" /></button></li>;
+              })}
             </ul>
           </div>
         ))}
@@ -81,7 +83,11 @@ const fotos: string[] = p.fotos ?? [];
     const btnPausa = c.querySelector<HTMLButtonElement>('[data-pausa]')!;
     let i = 0;
     let pausado = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const ir = (k: number) => {
+    const contador = c.querySelector<HTMLElement>('.carrusel__contador')!;
+    const ir = (k: number, manual = false) => {
+      // Solo se anuncia el cambio a los lectores de pantalla cuando lo pide la persona,
+      // no cada vez que el carrusel avanza solo.
+      contador.setAttribute('aria-live', manual ? 'polite' : 'off');
       imgs[i].classList.remove('activa');
       i = (k + imgs.length) % imgs.length;
       imgs[i].classList.add('activa');
@@ -89,15 +95,18 @@ const fotos: string[] = p.fotos ?? [];
     };
     const pintar = () => { c.classList.toggle('pausado', pausado); btnPausa.setAttribute('aria-label', pausado ? 'Reanudar' : 'Pausar'); };
     pintar();
-    setInterval(() => { if (!pausado && !c.matches(':hover')) ir(i + 1); }, 6000);
-    c.querySelector('[data-ant]')!.addEventListener('click', () => ir(i - 1));
-    c.querySelector('[data-sig]')!.addEventListener('click', () => ir(i + 1));
+    // No avanza mientras el ratón está encima o el foco del teclado está dentro.
+    setInterval(() => { if (!pausado && !c.matches(':hover') && !c.matches(':focus-within')) ir(i + 1); }, 6000);
+    c.querySelector('[data-ant]')!.addEventListener('click', () => ir(i - 1, true));
+    c.querySelector('[data-sig]')!.addEventListener('click', () => ir(i + 1, true));
     btnPausa.addEventListener('click', () => { pausado = !pausado; pintar(); });
   });
 
   const visor = document.querySelector<HTMLDialogElement>('.visor')!;
   document.querySelectorAll<HTMLButtonElement>('[data-ampliar]').forEach((b) => b.addEventListener('click', () => {
-    visor.querySelector('img')!.src = b.dataset.ampliar!;
+    const img = visor.querySelector('img')!;
+    img.src = b.dataset.ampliar!;
+    img.alt = b.dataset.alt!;
     visor.showModal();
   }));
   visor.querySelector('.visor__cerrar')!.addEventListener('click', () => visor.close());

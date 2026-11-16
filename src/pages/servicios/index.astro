@@ -3,7 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Icono from '../../components/Icono.astro';
 import { servicios } from '../../lib/datos.js';
 ---
-<Base titulo="Servicios">
+<Base titulo="Servicios" descripcion={`Servicios de Psicología sin estigma: ${servicios.map((s) => s.texto).join(", ")}.`}>
   <section class="seccion">
     <div class="contenedor estrecho">
       <h1>Servicios</h1>

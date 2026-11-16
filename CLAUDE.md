@@ -5,6 +5,8 @@ Web estática (Astro) editada por su dueña, sin conocimientos técnicos, desde 
 - Contenido: `src/content/**.json` · Imágenes: `public/uploads/` · Panel: `public/admin/config.yml`.
 - `config.yml` es el esquema: `scripts/validar-contenido.mjs` lo usa para validar el contenido.
   Si añades un dato a una página, añade su campo en `config.yml` (un test lo comprueba).
+- Página nueva: añádela a `src/pages/sitemap.xml.js` y a `PAGINAS` en `tests/e2e/*.spec.js`
+  (los tests de accesibilidad WCAG 2.2 AA y SEO la cubrirán).
 - Funciones puras en `src/lib/utilidades.js` (con tests). La carga de datos está en `src/lib/datos.js`.
 - Textos de la web en español. El lenguaje inclusivo (les, une misme, juntes…) es intencionado.
 - Web 100 % estática (Netlify sirve `dist/`): no añadas adaptadores SSR ni código de servidor,

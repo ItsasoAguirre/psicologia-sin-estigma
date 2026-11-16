@@ -5,7 +5,7 @@ import { pagina, recursos, md } from '../lib/datos.js';
 const p = pagina('recursos');
 const tipos = [...new Set(recursos.map((r) => r.tipo).filter(Boolean))];
 ---
-<Base titulo={p.titulo}>
+<Base titulo={p.titulo} descripcion={p.descripcion_seo || p.intro}>
   <section class="seccion">
     <div class="contenedor dos-col">
       <div>

@@ -6,7 +6,7 @@ import SesionInformativa from '../../components/SesionInformativa.astro';
 import { pagina } from '../../lib/datos.js';
 const p = pagina('psicoterapia');
 ---
-<Base titulo={p.titulo}>
+<Base titulo={p.titulo} descripcion={p.descripcion_seo || `${p.intro} ${p.ofrezco.lista.join(" ")}`}>
   <section class="cabecera-pagina">
     <div class="contenedor estrecho">
       <p class="mano etiqueta">Servicios</p>

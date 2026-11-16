@@ -149,6 +149,11 @@ collections:
               - label: Imagen
                 name: imagen
                 widget: image
+          - label: Descripción para Google (opcional)
+            name: descripcion_seo
+            widget: text
+            required: false
+            hint: Frase de unas 150-160 letras que aparece bajo el título en los resultados de búsqueda. Si la dejas vacía, se usa el principio del texto de la página.
       - name: sobre-mi
         label: Sobre mí
         file: src/content/paginas/sobre-mi.json
@@ -239,6 +244,11 @@ collections:
                   name: texto
                   widget: string
                 collapsed: false
+          - label: Descripción para Google (opcional)
+            name: descripcion_seo
+            widget: text
+            required: false
+            hint: Frase de unas 150-160 letras que aparece bajo el título en los resultados de búsqueda. Si la dejas vacía, se usa el principio del texto de la página.
       - name: psicoterapia
         label: Servicios › Psicoterapia
         file: src/content/paginas/psicoterapia.json
@@ -403,6 +413,11 @@ collections:
           - label: Frase final (enlaza a Contacto)
             name: cta
             widget: string
+          - label: Descripción para Google (opcional)
+            name: descripcion_seo
+            widget: text
+            required: false
+            hint: Frase de unas 150-160 letras que aparece bajo el título en los resultados de búsqueda. Si la dejas vacía, se usa el principio del texto de la página.
       - name: asesoramiento
         label: Servicios › Asesoramiento puntual
         file: src/content/paginas/asesoramiento.json
@@ -432,6 +447,11 @@ collections:
           - label: Texto del botón (enlaza a Contacto)
             name: cta
             widget: string
+          - label: Descripción para Google (opcional)
+            name: descripcion_seo
+            widget: text
+            required: false
+            hint: Frase de unas 150-160 letras que aparece bajo el título en los resultados de búsqueda. Si la dejas vacía, se usa el principio del texto de la página.
       - name: supervisiones
         label: Servicios › Supervisiones
         file: src/content/paginas/supervisiones.json
@@ -518,6 +538,11 @@ collections:
           - label: Frase final (enlaza a Contacto)
             name: cta
             widget: string
+          - label: Descripción para Google (opcional)
+            name: descripcion_seo
+            widget: text
+            required: false
+            hint: Frase de unas 150-160 letras que aparece bajo el título en los resultados de búsqueda. Si la dejas vacía, se usa el principio del texto de la página.
       - name: actividades-grupales
         label: Servicios › Actividades grupales
         file: src/content/paginas/actividades-grupales.json
@@ -554,6 +579,11 @@ collections:
           - label: Texto del botón (enlaza a Contacto)
             name: cta
             widget: string
+          - label: Descripción para Google (opcional)
+            name: descripcion_seo
+            widget: text
+            required: false
+            hint: Frase de unas 150-160 letras que aparece bajo el título en los resultados de búsqueda. Si la dejas vacía, se usa el principio del texto de la página.
       - name: retiros
         label: Servicios › Retiros
         file: src/content/paginas/retiros.json
@@ -609,11 +639,16 @@ collections:
               - label: Fotos de las reseñas
                 name: imagenes
                 widget: list
-                field:
-                  label: Foto
-                  name: imagen
-                  widget: image
-                collapsed: false
+                summary: "{{fields.transcripcion}}"
+                fields:
+                  - label: Foto de la reseña
+                    name: imagen
+                    widget: image
+                  - label: Transcripción (lo que pone en la nota)
+                    name: transcripcion
+                    widget: text
+                    required: false
+                    hint: Escribe aquí el texto de la nota. Lo leerán las personas ciegas con lector de pantalla y también ayuda a Google.
           - label: Texto final
             name: cierre
             widget: markdown
@@ -629,6 +664,11 @@ collections:
           - label: Texto del botón (enlaza a Contacto)
             name: cta
             widget: string
+          - label: Descripción para Google (opcional)
+            name: descripcion_seo
+            widget: text
+            required: false
+            hint: Frase de unas 150-160 letras que aparece bajo el título en los resultados de búsqueda. Si la dejas vacía, se usa el principio del texto de la página.
       - name: recursos-pagina
         label: Recursos (cabecera)
         file: src/content/paginas/recursos.json
@@ -651,6 +691,11 @@ collections:
               - bulleted-list
               - numbered-list
             editor_components: []
+          - label: Descripción para Google (opcional)
+            name: descripcion_seo
+            widget: text
+            required: false
+            hint: Frase de unas 150-160 letras que aparece bajo el título en los resultados de búsqueda. Si la dejas vacía, se usa el principio del texto de la página.
       - name: contacto
         label: Contacto
         file: src/content/paginas/contacto.json
@@ -664,6 +709,11 @@ collections:
           - label: Título del formulario
             name: formulario_titulo
             widget: string
+          - label: Descripción para Google (opcional)
+            name: descripcion_seo
+            widget: text
+            required: false
+            hint: Frase de unas 150-160 letras que aparece bajo el título en los resultados de búsqueda. Si la dejas vacía, se usa el principio del texto de la página.
       - name: privacidad
         label: Política de privacidad
         file: src/content/paginas/privacidad.json
@@ -683,6 +733,11 @@ collections:
               - bulleted-list
               - numbered-list
             editor_components: []
+          - label: Descripción para Google (opcional)
+            name: descripcion_seo
+            widget: text
+            required: false
+            hint: Frase de unas 150-160 letras que aparece bajo el título en los resultados de búsqueda. Si la dejas vacía, se usa el principio del texto de la página.
       - name: aviso-legal
         label: Aviso legal
         file: src/content/paginas/aviso-legal.json
@@ -702,6 +757,11 @@ collections:
               - bulleted-list
               - numbered-list
             editor_components: []
+          - label: Descripción para Google (opcional)
+            name: descripcion_seo
+            widget: text
+            required: false
+            hint: Frase de unas 150-160 letras que aparece bajo el título en los resultados de búsqueda. Si la dejas vacía, se usa el principio del texto de la página.
   - name: resenas
     label: Reseñas de terapia
     label_singular: Reseña

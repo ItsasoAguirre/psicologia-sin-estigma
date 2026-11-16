@@ -5,7 +5,7 @@ import SesionInformativa from '../../components/SesionInformativa.astro';
 import { pagina, md } from '../../lib/datos.js';
 const p = pagina('supervisiones');
 ---
-<Base titulo={p.titulo}>
+<Base titulo={p.titulo} descripcion={p.descripcion_seo || p.cuerpo}>
   <section class="seccion">
     <div class="contenedor dos-col arriba">
       <div>

@@ -10,7 +10,7 @@ const giros = [-2.5, 1.8, -1.2, 2.4, -1.8, 1.2];
     <li>
       <button class={`posit posit--${colores[i % colores.length]}`} style={`--giro:${giros[i % giros.length]}deg`} data-resena={i} aria-haspopup="dialog">
         <span class="posit__nombre">{r.nombre}</span>
-        <span class="posit__extracto">{extracto(r.texto)}</span>
+        <span class="posit__extracto" aria-hidden="true">{extracto(r.texto)}</span>
         <span class="posit__leer">Leer reseña</span>
       </button>
     </li>

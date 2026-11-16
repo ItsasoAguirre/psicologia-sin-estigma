@@ -6,7 +6,7 @@ import { pagina, ajustes } from '../lib/datos.js';
 const p = pagina('contacto');
 const tel = ajustes.telefono?.replace(/\s/g, '');
 ---
-<Base titulo={p.titulo}>
+<Base titulo={p.titulo} descripcion={p.descripcion_seo || p.intro}>
   <section class="seccion">
     <div class="contenedor contacto">
       <div>

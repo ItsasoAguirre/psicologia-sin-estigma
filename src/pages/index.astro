@@ -5,17 +5,34 @@ import Newsletter from '../components/Newsletter.astro';
 import Resenas from '../components/Resenas.astro';
 import { pagina, ajustes, spotify } from '../lib/datos.js';
 const p = pagina('inicio');
+
+// Datos estructurados: solo lo que se ve en la web.
+const web = new URL('/', Astro.site).href;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: ajustes.nombre,
+  description: p.descripcion_seo || ajustes.descripcion,
+  url: web,
+  logo: new URL(ajustes.logo, Astro.site).href,
+  image: new URL(ajustes.logo, Astro.site).href,
+  email: ajustes.email,
+  ...(ajustes.telefono && { telephone: `+34${ajustes.telefono.replace(/\s/g, '')}` }),
+  areaServed: [{ '@type': 'Country', name: 'España' }, { '@type': 'AdministrativeArea', name: 'Bizkaia' }],
+  availableLanguage: 'es',
+  ...(ajustes.instagram_url && { sameAs: [ajustes.instagram_url] }),
+};
 ---
-<Base>
+<Base titulo={p.hero.titulo} descripcion={p.descripcion_seo || p.hero.texto} jsonLd={jsonLd}>
   <section class="hero">
     <div class="contenedor dos-col">
       <div>
-        <img class="hero__logo" src={ajustes.logo} alt={ajustes.nombre} width="180" height="180" />
+        <img class="hero__logo" src={ajustes.logo} alt={ajustes.nombre} width="180" height="180" fetchpriority="high" />
         <h1>{p.hero.titulo}</h1>
         <p class="hero__texto">{p.hero.texto}</p>
-        <a class="boton" href="/servicios/psicoterapia">{p.hero.boton} <Icono nombre="flecha" size={18} /></a>
+        <a class="boton" href="/servicios/psicoterapia">{p.hero.boton}<span class="sr-only"> sobre la psicoterapia</span> <Icono nombre="flecha" size={18} /></a>
       </div>
-      <img class="foto hero__foto" src={p.hero.imagen} alt="" width="900" height="650" />
+      <img class="foto hero__foto" src={p.hero.imagen} alt="" width="900" height="650" fetchpriority="high" />
     </div>
   </section>
 
