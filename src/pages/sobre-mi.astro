@@ -1,4 +1,5 @@
 ---
+import Img from '../components/Img.astro';
 import Base from '../layouts/Base.astro';
 import { pagina, ajustes, md } from '../lib/datos.js';
 const p = pagina('sobre-mi');
@@ -9,8 +10,8 @@ const f = p.formacion;
     <div class="contenedor sobre">
       <div class="sobre__foto">
         {p.foto
-          ? <img class="foto" src={p.foto} alt="Foto de la psicóloga" width="600" height="750" />
-          : <img class="sobre__logo" src={ajustes.logo} alt="" width="400" height="400" />}
+          ? <Img class="foto" src={p.foto} alt="Foto de la psicóloga" sizes="(max-width: 820px) calc(100vw - 2.5rem), 440px" prioridad />
+          : <Img class="sobre__logo" src={ajustes.logo} alt="" sizes="(max-width: 820px) 220px, 380px" prioridad />}
       </div>
       <div>
         <h1>{p.titulo}</h1>
@@ -18,7 +19,7 @@ const f = p.formacion;
         <div class="prosa" set:html={md(p.personal)} />
         {p.meme_imagen && (
           <figure class="meme">
-            <img src={p.meme_imagen} alt={`Lisa Simpson: ${p.meme_texto}`} loading="lazy" width="480" height="270" />
+            <Img src={p.meme_imagen} alt={`Lisa Simpson: ${p.meme_texto}`} sizes="(max-width: 460px) calc(100vw - 3.5rem), 410px" />
             <figcaption>{p.meme_texto}</figcaption>
           </figure>
         )}
@@ -35,7 +36,7 @@ const f = p.formacion;
 
   <section class="seccion" id="formacion">
     <div class="contenedor formacion">
-      <img class="foto formacion__img" src={f.imagen} alt={f.titulo} loading="lazy" width="600" height="800" />
+      <Img class="foto formacion__img" src={f.imagen} alt={f.titulo} sizes="(max-width: 820px) min(360px, calc(100vw - 2.5rem)), 440px" />
       <div>
         <h2 class="sr-only">{f.titulo}</h2>
         <ul class="titulos">

@@ -1,4 +1,5 @@
 ---
+import Img from '../../components/Img.astro';
 import Base from '../../layouts/Base.astro';
 import Icono from '../../components/Icono.astro';
 import Modalidad from '../../components/Modalidad.astro';
@@ -20,7 +21,7 @@ const p = pagina('psicoterapia');
       <details class="pistas">
         <summary><span>{p.pistas.boton}</span><Icono nombre="abajo" /></summary>
         <div class="pistas__cuerpo dos-col">
-          <img class="foto" src={p.pistas.imagen} alt="" loading="lazy" width="700" height="700" />
+          <Img class="foto" src={p.pistas.imagen} alt="" sizes="(max-width: 820px) calc(100vw - 5rem), 520px" />
           <div>
             <h2>{p.pistas.titulo}</h2>
             <ul class="pistas__lista">{p.pistas.lista.map((t) => <li>{t}</li>)}</ul>
@@ -40,7 +41,7 @@ const p = pagina('psicoterapia');
   <section class="seccion seccion--lila">
     <div class="contenedor dos-col">
       <Modalidad {...p.modalidad} />
-      <img class="ilustracion" src={p.modalidad.imagen} alt="" loading="lazy" width="600" height="320" />
+      <Img class="ilustracion" src={p.modalidad.imagen} alt="" sizes="(max-width: 820px) calc(100vw - 2.5rem), 540px" />
     </div>
   </section>
 

@@ -76,10 +76,18 @@ test('reseñas: un pósit abre la reseña completa y se cierra', async ({ page }
   await expect(dialogo).toBeHidden();
 });
 
-test('podcast: hay un reproductor por episodio', async ({ page }) => {
+test('podcast: Spotify solo se carga al pulsar (un botón por episodio)', async ({ page }) => {
   const inicio = JSON.parse(readFileSync('src/content/paginas/inicio.json', 'utf8'));
+  await page.route(/spotify(cdn)?\.com|scdn\.co/, (r) => r.abort());
+  const peticionesSpotify = [];
+  page.on('request', (r) => { if (/spotify/.test(r.url())) peticionesSpotify.push(r.url()); });
   await page.goto('/');
-  await expect(page.locator('#podcast iframe[src*="open.spotify.com/embed"]')).toHaveCount(inicio.podcast.episodios.length);
+  await page.locator('#podcast').scrollIntoViewIfNeeded();
+  await expect(page.locator('#podcast [data-spotify]')).toHaveCount(inicio.podcast.episodios.length);
+  await expect(page.locator('#podcast iframe')).toHaveCount(0);
+  expect(peticionesSpotify, 'no debe contactar con Spotify antes de pulsar').toEqual([]);
+  await page.locator('#podcast [data-spotify] button').first().click();
+  await expect(page.locator('#podcast iframe[src*="open.spotify.com/embed/episode/"]')).toHaveCount(1);
 });
 
 test('retiros: el carrusel avanza y se puede pausar', async ({ page }) => {

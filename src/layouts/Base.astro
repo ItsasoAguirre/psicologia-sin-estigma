@@ -1,4 +1,6 @@
 ---
+import Img from '../components/Img.astro';
+import '../styles/fuentes.css';
 import '../styles/global.css';
 import Icono from '../components/Icono.astro';
 import { ajustes, servicios, extracto } from '../lib/datos.js';
@@ -37,17 +39,22 @@ const tel = ajustes.telefono?.replace(/\s/g, '');
   <meta name="twitter:card" content="summary" />
   <link rel="sitemap" href="/sitemap.xml" />
   {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, "<")} />}
-  <link rel="icon" href={ajustes.logo} />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Caveat:wght@600;700&family=Patrick+Hand&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <!-- Fuentes propias (sin peticiones a Google): se precargan las que se ven al abrir la página -->
+  <link rel="preload" href="/fonts/atkinson-hyperlegible-400.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/atkinson-hyperlegible-700.woff2" as="font" type="font/woff2" crossorigin />
+  <!-- Navegación casi instantánea: prepara la página al pasar el ratón por un enlace (Chrome/Edge) -->
+  <script type="speculationrules" is:inline>
+    { "prerender": [{ "where": { "and": [{ "href_matches": "/*" }, { "not": { "href_matches": "/admin*" } }] }, "eagerness": "moderate" }] }
+  </script>
 </head>
 <body>
   <a class="saltar sr-only" href="#contenido">Saltar al contenido</a>
   <header class="cabecera">
     <div class="contenedor cabecera__fila">
       <a href="/" class="marca" aria-label={`${ajustes.nombre}, inicio`}>
-        <img src={ajustes.logo} alt="" width="56" height="56" />
+        <Img src={ajustes.logo} alt="" sizes="56px" loading="eager" />
         <span class="marca__nombre">{ajustes.nombre}</span>
       </a>
       <button class="menu-movil" aria-expanded="false" aria-controls="navegacion">
@@ -77,7 +84,7 @@ const tel = ajustes.telefono?.replace(/\s/g, '');
   <footer class="pie">
     <div class="contenedor pie__rejilla">
       <div>
-        <img src={ajustes.logo} alt="" width="88" height="88" loading="lazy" />
+        <Img src={ajustes.logo} alt="" sizes="88px" />
         <p class="pie__nombre">{ajustes.nombre}</p>
         <p class="pie__peq">{ajustes.colegiada}</p>
       </div>

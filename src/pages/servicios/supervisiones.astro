@@ -1,4 +1,5 @@
 ---
+import Img from '../../components/Img.astro';
 import Base from '../../layouts/Base.astro';
 import Modalidad from '../../components/Modalidad.astro';
 import SesionInformativa from '../../components/SesionInformativa.astro';
@@ -13,7 +14,7 @@ const p = pagina('supervisiones');
         <h1>{p.titulo}</h1>
         <div class="prosa" set:html={md(p.cuerpo)} />
       </div>
-      <img class="foto" src={p.imagen} alt="" width="700" height="500" />
+      <Img class="foto" src={p.imagen} alt="" sizes="(max-width: 820px) calc(100vw - 2.5rem), 540px" prioridad />
     </div>
   </section>
   <section class="seccion seccion--lila">

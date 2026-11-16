@@ -1,5 +1,22 @@
 import { describe, it, expect } from 'vitest';
-import { spotify, extracto, analizarBrevo, emailValido, urlValida } from '../../src/lib/utilidades.js';
+import { spotify, extracto, analizarBrevo, emailValido, urlValida, anchosPara, rutaVariante, srcsetPara } from '../../src/lib/utilidades.js';
+
+describe('imágenes responsive', () => {
+  it('no agranda imágenes pequeñas', () => {
+    expect(anchosPara(700)).toEqual([160, 320, 640, 700]);
+    expect(anchosPara(120)).toEqual([120]);
+  });
+  it('limita las grandes a 1600', () => expect(anchosPara(4000)).toEqual([160, 320, 640, 1024, 1600]));
+  it('ruta de la versión WebP', () => {
+    expect(rutaVariante('/uploads/retiros/foto 1.JPG', 320)).toBe('/uploads/_v/320/retiros/foto 1.webp');
+    expect(rutaVariante('/uploads/icono.svg', 480)).toBeNull();
+    expect(rutaVariante('https://otra.com/a.jpg', 480)).toBeNull();
+  });
+  it('srcset con espacios codificados', () => {
+    expect(srcsetPara('/uploads/foto 1.jpg', 500)).toBe('/uploads/_v/160/foto%201.webp 160w, /uploads/_v/320/foto%201.webp 320w, /uploads/_v/500/foto%201.webp 500w');
+    expect(srcsetPara('/uploads/a.gif', 500)).toBeUndefined();
+  });
+});
 
 describe('spotify', () => {
   it('convierte un enlace de episodio en reproductor', () => {

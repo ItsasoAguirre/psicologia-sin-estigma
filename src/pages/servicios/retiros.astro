@@ -1,4 +1,5 @@
 ---
+import Img from '../../components/Img.astro';
 import Base from '../../layouts/Base.astro';
 import Icono from '../../components/Icono.astro';
 import { pagina, md } from '../../lib/datos.js';
@@ -7,7 +8,7 @@ const fotos: string[] = p.fotos ?? [];
 ---
 <Base titulo={p.titulo} descripcion={p.descripcion_seo || p.tipos?.[0]?.texto}>
   <section class="portada">
-    <img src={p.imagen} alt={p.titulo} width="2000" height="1125" />
+    <Img src={p.imagen} alt={p.titulo} sizes="100vw" prioridad />
   </section>
 
   <section class="seccion">
@@ -31,8 +32,9 @@ const fotos: string[] = p.fotos ?? [];
         {fotos.length > 0 && (
           <div class="carrusel" data-carrusel aria-roledescription="carrusel" aria-label={p.galeria_titulo}>
             <div class="carrusel__pista">
+              <noscript><img src={fotos[0]} alt="Foto de un retiro anterior" class="activa" /></noscript>
               {fotos.map((f, i) => (
-                <img src={f} alt={`Foto de un retiro anterior (${i + 1} de ${fotos.length})`} loading={i < 2 ? 'eager' : 'lazy'} class={i === 0 ? 'activa' : ''} width="1400" height="1050" />
+                <Img src={f} alt={`Foto de un retiro anterior (${i + 1} de ${fotos.length})`} class={i === 0 ? 'activa' : ''} sizes="(max-width: 900px) calc(100vw - 2.5rem), 620px" diferida />
               ))}
             </div>
             <div class="carrusel__controles">
@@ -53,7 +55,7 @@ const fotos: string[] = p.fotos ?? [];
               {g.imagenes.map((r, i) => {
                 // Las reseñas son fotos de notas escritas a mano: la transcripción es su texto alternativo.
                 const alt = r.transcripcion?.trim() ? `Reseña escrita a mano: «${r.transcripcion.trim()}»` : `Reseña escrita a mano ${i + 1} de ${g.titulo}`;
-                return <li><button data-ampliar={r.imagen} data-alt={alt} aria-label={`Ampliar. ${alt}`}><img src={r.imagen} alt="" loading="lazy" width="300" height="400" /></button></li>;
+                return <li><button data-ampliar={r.imagen} data-alt={alt} aria-label={`Ampliar. ${alt}`}><Img src={r.imagen} alt="" sizes="(max-width: 900px) 30vw, 140px" /></button></li>;
               })}
             </ul>
           </div>
@@ -84,14 +86,29 @@ const fotos: string[] = p.fotos ?? [];
     let i = 0;
     let pausado = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const contador = c.querySelector<HTMLElement>('.carrusel__contador')!;
+    // Las fotos se descargan justo antes de mostrarse (todas están superpuestas, así que
+    // `loading="lazy"` no serviría: el navegador las consideraría visibles a la vez).
+    const cargar = (img?: HTMLImageElement) => {
+      if (!img?.dataset.src) return;
+      if (img.dataset.srcset) { img.sizes = img.dataset.sizes ?? ''; img.srcset = img.dataset.srcset; }
+      img.src = img.dataset.src;
+      delete img.dataset.src;
+    };
+    const vecinas = () => { cargar(imgs[(i + 1) % imgs.length]); cargar(imgs[(i - 1 + imgs.length) % imgs.length]); };
+    // La siguiente se prepara cuando el carrusel se acerca a la pantalla.
+    // La primera y sus vecinas se piden cuando el carrusel se acerca a la pantalla, para no competir
+    // con la imagen principal de la página.
+    new IntersectionObserver((e, o) => { if (e[0].isIntersecting) { cargar(imgs[i]); vecinas(); o.disconnect(); } }, { rootMargin: '200px' }).observe(c);
     const ir = (k: number, manual = false) => {
       // Solo se anuncia el cambio a los lectores de pantalla cuando lo pide la persona,
       // no cada vez que el carrusel avanza solo.
       contador.setAttribute('aria-live', manual ? 'polite' : 'off');
       imgs[i].classList.remove('activa');
       i = (k + imgs.length) % imgs.length;
+      cargar(imgs[i]);
       imgs[i].classList.add('activa');
       n.textContent = String(i + 1);
+      vecinas();
     };
     const pintar = () => { c.classList.toggle('pausado', pausado); btnPausa.setAttribute('aria-label', pausado ? 'Reanudar' : 'Pausar'); };
     pintar();

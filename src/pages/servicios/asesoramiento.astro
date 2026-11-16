@@ -1,12 +1,15 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Icono from '../../components/Icono.astro';
+import Img from '../../components/Img.astro';
 import { pagina, md } from '../../lib/datos.js';
 const p = pagina('asesoramiento');
 ---
 <Base titulo={p.titulo} descripcion={p.descripcion_seo || `${p.subtitulo} ${p.cuerpo}`}>
-  <section class="fondo" style={`--imagen: url('${p.imagen_fondo}')`}>
-    <div class="contenedor">
+  <section class="fondo">
+    <!-- Imagen real (no fondo CSS) para que el navegador la descubra y la pida cuanto antes -->
+    <Img class="fondo__img" src={p.imagen_fondo} alt="" sizes="100vw" prioridad />
+    <div class="contenedor fondo__capa">
       <div class="fondo__texto">
         <p class="mano etiqueta">Servicios</p>
         <h1>{p.titulo}</h1>
@@ -21,10 +24,18 @@ const p = pagina('asesoramiento');
 <style>
   /* La foto ocupa toda la sección; el texto va a la izquierda para no tapar el poste. */
   .fondo {
+    position: relative; isolation: isolate; overflow: hidden;
     min-height: min(calc(100vh - 76px), 860px); display: flex; align-items: center; padding-block: 4rem;
-    background: linear-gradient(90deg, rgba(36, 16, 70, .82) 0%, rgba(36, 16, 70, .55) 45%, rgba(36, 16, 70, 0) 70%), var(--imagen) center right / cover no-repeat;
-    color: #fff;
+    color: #fff; background: var(--morado-900);
   }
+  .fondo :global(.fondo__img) {
+    position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: right center;
+  }
+  .fondo::before {
+    content: ''; position: absolute; inset: 0; z-index: -1;
+    background: linear-gradient(90deg, rgba(36, 16, 70, .82) 0%, rgba(36, 16, 70, .55) 45%, rgba(36, 16, 70, 0) 70%);
+  }
+  .fondo__capa { position: relative; }
   .fondo__texto { max-width: 34rem; }
   .fondo h1, .fondo :global(strong) { color: #fff; }
   .etiqueta { font-size: 1.6rem; margin: 0; color: var(--verde-200); }
@@ -33,6 +44,7 @@ const p = pagina('asesoramiento');
   .fondo .boton { background: #fff; color: var(--morado-800); }
   .fondo .boton:hover { background: var(--lila-100); }
   @media (max-width: 760px) {
-    .fondo { background: linear-gradient(180deg, rgba(36, 16, 70, .8), rgba(36, 16, 70, .7)), var(--imagen) 70% center / cover no-repeat; }
+    .fondo :global(.fondo__img) { object-position: 70% center; }
+    .fondo::before { background: linear-gradient(180deg, rgba(36, 16, 70, .8), rgba(36, 16, 70, .7)); }
   }
 </style>

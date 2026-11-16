@@ -1,9 +1,11 @@
 ---
+import Img from '../components/Img.astro';
 import Base from '../layouts/Base.astro';
 import Icono from '../components/Icono.astro';
 import Newsletter from '../components/Newsletter.astro';
 import Resenas from '../components/Resenas.astro';
-import { pagina, ajustes, spotify } from '../lib/datos.js';
+import Spotify from '../components/Spotify.astro';
+import { pagina, ajustes } from '../lib/datos.js';
 const p = pagina('inicio');
 
 // Datos estructurados: solo lo que se ve en la web.
@@ -27,12 +29,12 @@ const jsonLd = {
   <section class="hero">
     <div class="contenedor dos-col">
       <div>
-        <img class="hero__logo" src={ajustes.logo} alt={ajustes.nombre} width="180" height="180" fetchpriority="high" />
+        <Img class="hero__logo" src={ajustes.logo} alt={ajustes.nombre} sizes="120px" loading="eager" />
         <h1>{p.hero.titulo}</h1>
         <p class="hero__texto">{p.hero.texto}</p>
         <a class="boton" href="/servicios/psicoterapia">{p.hero.boton}<span class="sr-only"> sobre la psicoterapia</span> <Icono nombre="flecha" size={18} /></a>
       </div>
-      <img class="foto hero__foto" src={p.hero.imagen} alt="" width="900" height="650" fetchpriority="high" />
+      <Img class="foto hero__foto" src={p.hero.imagen} alt="" sizes="(max-width: 820px) calc(100vw - 2.5rem), 540px" prioridad />
     </div>
   </section>
 
@@ -46,7 +48,7 @@ const jsonLd = {
 
   <section class="seccion seccion--lila" id="newsletter">
     <div class="contenedor estrecho newsletter">
-      <img src={p.newsletter.imagen} alt="" loading="lazy" width="200" height="100" />
+      <Img src={p.newsletter.imagen} alt="" sizes="140px" />
       <h2>{p.newsletter.titulo}</h2>
       <p>{p.newsletter.texto}</p>
       <Newsletter boton={p.newsletter.boton} exito={p.newsletter.mensaje_exito} />
@@ -55,17 +57,12 @@ const jsonLd = {
 
   <section class="seccion" id="podcast">
     <div class="contenedor dos-col">
-      <img class="foto podcast__img" src={p.podcast.imagen} alt="" loading="lazy" width="700" height="500" />
+      <Img class="foto podcast__img" src={p.podcast.imagen} alt="" sizes="(max-width: 460px) calc(100vw - 2.5rem), 420px" />
       <div>
         <h2>{p.podcast.titulo}</h2>
         <p>{p.podcast.texto}</p>
         <div class="podcast__episodios">
-          {p.podcast.episodios.map((e) => {
-            const src = spotify(e.url);
-            return src
-              ? <iframe src={src} title={`${p.podcast.titulo}: ${e.titulo}`} width="100%" height="152" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" style="border:0;border-radius:12px"></iframe>
-              : <a class="boton boton--borde" href={e.url} target="_blank" rel="noopener">{e.titulo} <Icono nombre="enlace" size={18} /></a>;
-          })}
+          {p.podcast.episodios.map((e) => <Spotify url={e.url} titulo={e.titulo} programa={p.podcast.titulo} />)}
         </div>
       </div>
     </div>
@@ -74,7 +71,7 @@ const jsonLd = {
   <section class="seccion seccion--lila" id="resenas">
     <div class="contenedor">
       <div class="resenas__cabecera">
-        <img src={p.resenas.imagen} alt="" loading="lazy" width="320" height="213" />
+        <Img src={p.resenas.imagen} alt="" sizes="220px" />
         <div>
           <h2>{p.resenas.titulo}</h2>
           <p>{p.resenas.texto}</p>

@@ -1,0 +1,50 @@
+---
+// Imagen optimizada: tamaño real (evita saltos de página), versiones WebP por ancho y carga diferida.
+// Uso: <Img src={p.imagen} alt="" sizes="(max-width: 820px) 100vw, 50vw" />
+import sharp from 'sharp';
+import { join } from 'node:path';
+import { srcsetPara, esRedimensionable } from '../lib/utilidades.js';
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = Omit<HTMLAttributes<'img'>, 'src' | 'alt'> & {
+  src: string;
+  alt: string;
+  /** Ancho con que se mostrará: imprescindible para que el navegador elija bien la versión. */
+  sizes?: string;
+  /** La imagen principal de la página: se descarga la primera. */
+  prioridad?: boolean;
+  /** No se descarga hasta que un script copie data-src/data-srcset (p. ej. fotos del carrusel). */
+  diferida?: boolean;
+};
+
+const { src, alt, sizes = '100vw', prioridad = false, diferida = false, width, height, loading, decoding, ...resto } = Astro.props;
+
+let ancho: number | undefined;
+let alto: number | undefined;
+if (esRedimensionable(src)) {
+  try {
+    const m = await sharp(join(process.cwd(), 'public', decodeURI(src))).metadata();
+    const girada = (m.orientation ?? 1) >= 5; // fotos de móvil giradas por EXIF
+    ancho = girada ? m.height : m.width;
+    alto = girada ? m.width : m.height;
+  } catch {
+    // Si la imagen no existe, el validador de contenido ya lo avisa.
+  }
+}
+const srcset = import.meta.env.PROD ? srcsetPara(src, ancho) : undefined;
+---
+<img
+  src={diferida ? undefined : src}
+  srcset={diferida ? undefined : srcset}
+  sizes={!diferida && srcset ? sizes : undefined}
+  data-src={diferida ? src : undefined}
+  data-srcset={diferida ? srcset : undefined}
+  data-sizes={diferida && srcset ? sizes : undefined}
+  alt={alt}
+  width={ancho ?? width}
+  height={alto ?? height}
+  loading={loading ?? (prioridad ? 'eager' : 'lazy')}
+  fetchpriority={prioridad ? 'high' : undefined}
+  decoding={decoding ?? (prioridad ? undefined : 'async')}
+  {...resto}
+/>

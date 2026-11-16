@@ -34,5 +34,35 @@ export function analizarBrevo(valor = '') {
   };
 }
 
+// ---------- Imágenes responsive ----------
+// Las versiones las crea scripts/optimizar-imagenes.mjs tras compilar; el componente <Img>
+// las enlaza en `srcset`. Ambos usan estas funciones para coincidir exactamente.
+export const ANCHOS = [160, 320, 640, 1024, 1600];
+const REDIMENSIONABLE = /\.(jpe?g|png|webp|avif)$/i;
+
+/** Anchos que tendrá una imagen según su ancho original (nunca se agranda). */
+export function anchosPara(anchoOriginal) {
+  if (!anchoOriginal) return [];
+  const menores = ANCHOS.filter((w) => w < anchoOriginal);
+  return anchoOriginal <= ANCHOS.at(-1) ? [...menores, anchoOriginal] : menores;
+}
+
+/** Ruta de la versión WebP de una imagen subida: /uploads/x.jpg → /uploads/_v/480/x.webp */
+export function rutaVariante(src, ancho) {
+  if (!esRedimensionable(src)) return null;
+  const relativa = src.slice('/uploads/'.length).replace(REDIMENSIONABLE, '.webp');
+  return `/uploads/_v/${ancho}/${relativa}`;
+}
+
+export const esRedimensionable = (src = '') =>
+  typeof src === 'string' && src.startsWith('/uploads/') && !src.startsWith('/uploads/_v/') && REDIMENSIONABLE.test(src);
+
+/** Valor del atributo srcset (rutas codificadas: el srcset separa por espacios). */
+export function srcsetPara(src, anchoOriginal) {
+  if (!esRedimensionable(src)) return undefined;
+  const lista = anchosPara(anchoOriginal);
+  return lista.length ? lista.map((w) => `${encodeURI(rutaVariante(src, w))} ${w}w`).join(', ') : undefined;
+}
+
 export const emailValido = (s = '') => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(s));
 export const urlValida = (s = '') => { try { const u = new URL(s); return u.protocol === 'https:' || u.protocol === 'http:'; } catch { return false; } };
