@@ -64,8 +64,6 @@ p { text-wrap: pretty; }
   transition: background .2s, transform .2s;
 }
 .boton:hover { background: var(--morado-800); color: #fff; transform: translateY(-1px); }
-.boton--verde { background: var(--verde-600); }
-.boton--verde:hover { background: var(--verde-800); }
 .boton--borde { background: transparent; color: var(--morado-700); box-shadow: inset 0 0 0 2px var(--morado-700); }
 .boton--borde:hover { background: var(--morado-700); color: #fff; }
 

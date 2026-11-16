@@ -9,12 +9,12 @@ Web estática (Astro) editada por su dueña, sin conocimientos técnicos, desde 
   (los tests de accesibilidad WCAG 2.2 AA y SEO la cubrirán).
 - Rendimiento: usa siempre `<Img>` (`src/components/Img.astro`) en vez de `<img>`, con un `sizes`
   real; genera versiones WebP al compilar. Fuentes alojadas en `public/fonts` (nada de Google Fonts).
-  Contenido de terceros (Spotify…) solo tras una acción de quien visita, como `Spotify.astro`.
+  Contenido de terceros (Spotify…) en diferido y con un skeleton del mismo tamaño, como `Spotify.astro`.
 - Funciones puras en `src/lib/utilidades.js` (con tests). La carga de datos está en `src/lib/datos.js`.
 - Textos de la web en español. El lenguaje inclusivo (les, une misme, juntes…) es intencionado.
 - Web 100 % estática (Netlify sirve `dist/`): no añadas adaptadores SSR ni código de servidor,
   aunque la skill `astro` los mencione.
-- Diseño: respeta la identidad existente (morados del logo, verde en servicios, cuaderno/pósits,
+- Diseño: respeta la identidad existente (morados y lilas del logo, sin verde salvo para mensajes de éxito, cuaderno/pósits,
   tipografías Atkinson Hyperlegible + Caveat/Patrick Hand) y la accesibilidad (movimiento reducido,
   foco visible, sin sobreestimulación). Para cambios visuales usa la skill `frontend-design`.
 

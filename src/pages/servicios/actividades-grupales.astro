@@ -26,7 +26,7 @@ const p = pagina('actividades-grupales');
       <ul class="talleres">
         {p.talleres.map((t) => <li><Icono nombre="hoja" size={20} />{t}</li>)}
       </ul>
-      <p class="cta"><a class="boton boton--verde" href="/contacto">{p.cta} <Icono nombre="flecha" size={18} /></a></p>
+      <p class="cta"><a class="boton" href="/contacto">{p.cta} <Icono nombre="flecha" size={18} /></a></p>
     </div>
   </section>
 </Base>
@@ -35,6 +35,6 @@ const p = pagina('actividades-grupales');
   .acciones { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.5rem; }
   .talleres { list-style: none; padding: 0; margin: 1.5rem 0 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: .9rem; }
   .talleres li { display: flex; gap: .7rem; align-items: center; background: #fff; border: 1px solid var(--borde); border-radius: var(--radio); padding: .9rem 1.1rem; font-weight: 700; color: var(--morado-800); }
-  .talleres :global(.icono) { color: var(--verde-600); flex: none; }
+  .talleres :global(.icono) { color: var(--morado-500); flex: none; }
   .cta { margin-top: 2.5rem; }
 </style>

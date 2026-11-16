@@ -28,6 +28,11 @@ test.describe('todas las páginas', () => {
       const rotas = await page.locator('main img').evaluateAll((imgs) =>
         imgs.filter((i) => i.getAttribute('src') && i.complete && i.naturalWidth === 0 && i.loading !== 'lazy').map((i) => i.src));
       expect(rotas).toEqual([]);
+      // Ninguna imagen se muestra mucho mayor que el tamaño fijo declarado en `sizes` (p. ej. un logo de 88px)
+      const gigantes = await page.locator('img[sizes$="px"]').evaluateAll((imgs) => imgs
+        .filter((i) => /^\d+px$/.test(i.getAttribute('sizes')) && i.getBoundingClientRect().width > parseInt(i.getAttribute('sizes')) * 1.15)
+        .map((i) => `${i.getAttribute('src')} se ve a ${Math.round(i.getBoundingClientRect().width)}px (sizes=${i.getAttribute('sizes')})`));
+      expect(gigantes).toEqual([]);
       // Sin scroll horizontal (importante en móvil)
       const desborda = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
       expect(desborda).toBe(false);

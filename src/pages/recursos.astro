@@ -54,7 +54,7 @@ const tipos = [...new Set(recursos.map((r) => r.tipo).filter(Boolean))];
 
 <style>
   .intro { font-size: 1.15rem; }
-  .recursos__img { max-height: 360px; }
+  .dos-col :global(.recursos__img) { max-height: 360px; width: auto; margin-inline: auto; }
   .filtros { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.75rem; }
   .filtro { font: inherit; font-weight: 700; padding: .5rem 1rem; border-radius: 999px; border: 2px solid var(--morado-700); background: #fff; color: var(--morado-700); cursor: pointer; }
   .filtro[aria-pressed='true'] { background: var(--morado-700); color: #fff; }
@@ -64,6 +64,6 @@ const tipos = [...new Set(recursos.map((r) => r.tipo).filter(Boolean))];
   .tarjeta__cuerpo { padding: 1.25rem 1.4rem 1.5rem; display: flex; flex-direction: column; flex: 1; }
   .tarjeta h2 { font-size: 1.2rem; margin: .4rem 0 .5rem; }
   .tarjeta .prosa { font-size: .98rem; color: var(--texto-suave); }
-  .tarjeta__tipo { align-self: flex-start; font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--verde-800); background: var(--verde-50); padding: .2rem .6rem; border-radius: 999px; }
+  .tarjeta__tipo { align-self: flex-start; font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--morado-800); background: var(--lila-100); padding: .2rem .6rem; border-radius: 999px; }
   .tarjeta__enlace { margin-top: auto; padding-top: .75rem; font-weight: 700; display: inline-flex; gap: .35rem; align-items: center; }
 </style>
