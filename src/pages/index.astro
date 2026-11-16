@@ -62,7 +62,9 @@ const jsonLd = {
         <h2>{p.podcast.titulo}</h2>
         <p>{p.podcast.texto}</p>
         <div class="podcast__episodios">
-          {p.podcast.episodios.map((e) => <Spotify url={e.url} titulo={e.titulo} programa={p.podcast.titulo} />)}
+          {p.podcast.episodios.map((e) => (
+            <Spotify url={e.url} titulo={e.titulo} subtitulo={e.subtitulo} duracion={e.duracion} portada={p.podcast.imagen} programa={p.podcast.titulo} />
+          ))}
         </div>
       </div>
     </div>

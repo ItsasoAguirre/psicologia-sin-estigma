@@ -76,18 +76,22 @@ test('reseñas: un pósit abre la reseña completa y se cierra', async ({ page }
   await expect(dialogo).toBeHidden();
 });
 
-test('podcast: Spotify solo se carga al pulsar (un botón por episodio)', async ({ page }) => {
+test('podcast: skeleton y reproductor de Spotify que se carga solo al acercarse', async ({ page }) => {
   const inicio = JSON.parse(readFileSync('src/content/paginas/inicio.json', 'utf8'));
-  await page.route(/spotify(cdn)?\.com|scdn\.co/, (r) => r.abort());
-  const peticionesSpotify = [];
-  page.on('request', (r) => { if (/spotify/.test(r.url())) peticionesSpotify.push(r.url()); });
+  const n = inicio.podcast.episodios.length;
+  await page.route(/spotify(cdn)?\.com|scdn\.co/, (r) => r.abort()); // sin depender de Spotify
   await page.goto('/');
+  const cajas = page.locator('#podcast [data-spotify]');
+  await expect(cajas).toHaveCount(n);
+  await expect(page.locator('#podcast .sp__esqueleto')).toHaveCount(n);
+  // Si la sección está lejos de la pantalla, aún no se ha creado el reproductor.
+  const lejos = await cajas.first().evaluate((el) => el.getBoundingClientRect().top > innerHeight + 700);
+  if (lejos) await expect(page.locator('#podcast iframe')).toHaveCount(0);
+  // Al acercarse se crea solo, sin pulsar nada, y ocupa exactamente el hueco del skeleton.
   await page.locator('#podcast').scrollIntoViewIfNeeded();
-  await expect(page.locator('#podcast [data-spotify]')).toHaveCount(inicio.podcast.episodios.length);
-  await expect(page.locator('#podcast iframe')).toHaveCount(0);
-  expect(peticionesSpotify, 'no debe contactar con Spotify antes de pulsar').toEqual([]);
-  await page.locator('#podcast [data-spotify] button').first().click();
-  await expect(page.locator('#podcast iframe[src*="open.spotify.com/embed/episode/"]')).toHaveCount(1);
+  await expect(page.locator('#podcast iframe[src*="open.spotify.com/embed/episode/"]')).toHaveCount(n);
+  const alto = await cajas.first().evaluate((el) => el.getBoundingClientRect().height);
+  expect(alto).toBe(152);
 });
 
 test('retiros: el carrusel avanza y se puede pausar', async ({ page }) => {

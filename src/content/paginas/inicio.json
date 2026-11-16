@@ -36,11 +36,15 @@
     "imagen": "/uploads/podcast.jpg",
     "episodios": [
       {
-        "titulo": "Parte 1",
+        "titulo": "Que la terapia no te quite la revolución",
+        "subtitulo": "26 abr · Mamarrachas y profundas.",
+        "duracion": "28:24",
         "url": "https://open.spotify.com/episode/54kefDZXojTIH2VAEJdNSP"
       },
       {
-        "titulo": "Parte 2",
+        "titulo": "Parte 2. Que la terapia no te quite la revolución",
+        "subtitulo": "26 abr · Mamarrachas y profundas.",
+        "duracion": "19:57",
         "url": "https://open.spotify.com/episode/3cgphMTkKEzZolRxrgTGTi"
       }
     ]

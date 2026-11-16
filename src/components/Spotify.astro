@@ -1,57 +1,128 @@
 ---
-// Reproductor de Spotify "bajo demanda": hasta que la persona pulsa, solo se muestra un botón
-// con el estilo de la web. Así la página no descarga ~650 KB de Spotify ni recibe sus cookies
-// de terceros sin una acción de quien visita.
+// Reproductor de Spotify con "skeleton": mientras carga se ve una silueta con la misma forma,
+// tamaño (152 px) y colores que el reproductor, así que al aparecer no hay saltos.
+// El reproductor se crea solo cuando la sección se acerca a la pantalla, para no retrasar
+// la carga inicial de la página.
+import sharp from 'sharp';
+import { join } from 'node:path';
+import Img from './Img.astro';
 import Icono from './Icono.astro';
 import { spotify } from '../lib/utilidades.js';
 
-interface Props { url: string; titulo: string; programa: string }
-const { url, titulo, programa } = Astro.props;
+interface Props { url: string; titulo: string; subtitulo?: string; duracion?: string; portada: string; programa: string }
+const { url, titulo, subtitulo, duracion, portada, programa } = Astro.props;
 const embed = spotify(url);
+
+// Color de fondo: el dominante de la portada (como hace Spotify), oscurecido hasta que el texto
+// blanco tenga un contraste de al menos 7:1.
+async function colorDeFondo(src: string) {
+  let [r, g, b] = [91, 63, 147];
+  try {
+    const { dominant } = await sharp(join(process.cwd(), 'public', decodeURI(src))).stats();
+    [r, g, b] = [dominant.r, dominant.g, dominant.b];
+  } catch { /* portada externa o inexistente: color por defecto */ }
+  const lum = (c: number[]) => c.map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; })
+    .reduce((s, v, i) => s + v * [0.2126, 0.7152, 0.0722][i], 0);
+  while (1.05 / (lum([r, g, b]) + 0.05) < 7) [r, g, b] = [r, g, b].map((v) => Math.round(v * 0.92));
+  return `rgb(${r} ${g} ${b})`;
+}
+const fondo = embed ? await colorDeFondo(portada) : '';
+const iframeSrc = embed ? `${embed}?utm_source=generator` : '';
+const iframeTitulo = `${programa}: ${titulo}`;
+const permisos = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
 ---
 {embed ? (
-  <div class="sp" data-spotify={`${embed}?autoplay=1`} data-titulo={`${programa}: ${titulo}`}>
-    <button type="button" class="sp__boton">
-      <span class="sp__play" aria-hidden="true"><Icono nombre="play" size={22} /></span>
-      <span class="sp__texto">
+  <div class="sp" data-spotify={iframeSrc} data-titulo={iframeTitulo} style={`--sp-fondo: ${fondo}`} aria-busy="true">
+    <!-- Skeleton: solo decorativo; el reproductor real lo sustituye al cargar -->
+    <div class="sp__esqueleto" aria-hidden="true">
+      <Img class="sp__portada" src={portada} alt="" sizes="120px" />
+      <div class="sp__info">
         <span class="sp__titulo">{titulo}</span>
-        <span class="sp__nota">Escuchar aquí · se cargará el reproductor de Spotify</span>
-      </span>
-    </button>
-    <a class="sp__enlace" href={url} target="_blank" rel="noopener">Abrir en Spotify <Icono nombre="enlace" size={14} /></a>
+        {subtitulo && <span class="sp__sub">{subtitulo}</span>}
+        <span class="sp__linea"></span>
+        <span class="sp__barra">
+          <span class="sp__pista"></span>
+          {duracion && <span class="sp__duracion">{duracion}</span>}
+          <span class="sp__play"><Icono nombre="play" size={20} /></span>
+        </span>
+      </div>
+    </div>
+    <span class="sr-only">Cargando el reproductor del episodio «{titulo}»…</span>
+    <noscript><iframe class="sp__iframe sp__iframe--visible" src={iframeSrc} title={iframeTitulo} height="152" allow={permisos}></iframe></noscript>
   </div>
 ) : (
   <a class="boton boton--borde" href={url} target="_blank" rel="noopener">{titulo} <Icono nombre="enlace" size={18} /></a>
 )}
 
 <script>
-  document.querySelectorAll<HTMLElement>('[data-spotify]').forEach((caja) => {
-    caja.querySelector('button')!.addEventListener('click', () => {
-      const iframe = document.createElement('iframe');
-      iframe.src = caja.dataset.spotify!;
-      iframe.title = caja.dataset.titulo!;
-      iframe.height = '152';
-      iframe.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
-      iframe.className = 'sp__iframe';
-      caja.replaceChildren(iframe);
-      iframe.focus();
-    });
-  });
+  const crear = (caja: HTMLElement) => {
+    const iframe = document.createElement('iframe');
+    iframe.src = caja.dataset.spotify!;
+    iframe.title = caja.dataset.titulo!;
+    iframe.height = '152';
+    iframe.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
+    iframe.className = 'sp__iframe';
+    let hecho = false;
+    const mostrar = () => {
+      if (hecho) return;
+      hecho = true;
+      // Spotify tarda un instante en pintar tras el evento load: se espera un poco antes del fundido.
+      setTimeout(() => {
+        iframe.classList.add('sp__iframe--visible');
+        caja.removeAttribute('aria-busy');
+        caja.querySelector('.sr-only')?.remove();
+        // Tras el fundido, el skeleton ya no hace falta.
+        setTimeout(() => caja.querySelector('.sp__esqueleto')?.remove(), 400);
+      }, 350);
+    };
+    iframe.addEventListener('load', mostrar);
+    setTimeout(mostrar, 10000); // por si el evento load no llega
+    caja.append(iframe);
+  };
+
+  const cajas = document.querySelectorAll<HTMLElement>('[data-spotify]');
+  // Se crean cuando la sección está a menos de ~1 pantalla de distancia.
+  const observador = new IntersectionObserver((entradas) => {
+    for (const e of entradas) if (e.isIntersecting) { observador.unobserve(e.target); crear(e.target as HTMLElement); }
+  }, { rootMargin: '600px 0px' });
+  cajas.forEach((c) => observador.observe(c));
 </script>
 
 <style>
-  .sp { display: grid; gap: .35rem; }
-  .sp__boton {
-    display: flex; align-items: center; gap: 1rem; width: 100%; min-height: 96px; padding: 1rem 1.25rem;
-    border: 0; border-radius: 12px; cursor: pointer; text-align: left; font: inherit;
-    background: var(--morado-800); color: #fff; transition: background .2s;
+  .sp { position: relative; height: 152px; border-radius: 12px; overflow: hidden; background: var(--sp-fondo); isolation: isolate; }
+  .sp__esqueleto { position: absolute; inset: 0; display: flex; gap: 20px; padding: 16px 16px 16px 12px; color: #fff; }
+  .sp__esqueleto :global(.sp__portada) {
+    flex: none; width: 120px; height: 120px; border-radius: 8px; object-fit: contain;
+    background: rgb(255 255 255 / .08); box-shadow: 0 4px 14px rgba(0, 0, 0, .3);
   }
-  .sp__boton:hover { background: var(--morado-700); }
-  .sp__play { flex: none; width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: #fff; color: var(--morado-800); }
-  .sp__play :global(.icono) { margin-left: 3px; fill: currentColor; }
-  .sp__texto { display: grid; gap: .15rem; }
-  .sp__titulo { font-weight: 700; font-size: 1.1rem; }
-  .sp__nota { font-size: .88rem; color: var(--lila-200); }
-  .sp__enlace { justify-self: end; font-size: .9rem; display: inline-flex; gap: .3rem; align-items: center; }
-  .sp :global(.sp__iframe) { width: 100%; border: 0; border-radius: 12px; }
+  .sp__info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  .sp__titulo { font-weight: 700; font-size: 1.05rem; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .sp__sub { font-size: .95rem; color: rgba(255, 255, 255, .85); margin-top: .2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  /* Hueco del botón «Guardar en Spotify» */
+  .sp__linea { width: 45%; height: 12px; margin-top: .7rem; border-radius: 6px; background: rgb(255 255 255 / .18); }
+  .sp__barra { margin-top: auto; display: flex; align-items: center; gap: .75rem; }
+  .sp__pista { flex: 1; height: 4px; border-radius: 2px; background: rgba(255, 255, 255, .3); }
+  .sp__duracion { font-size: .9rem; font-variant-numeric: tabular-nums; }
+  .sp__play { flex: none; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: #fff; color: #000; }
+  .sp__play :global(.icono) { margin-left: 2px; fill: currentColor; }
+
+  /* Brillo que recorre el skeleton mientras carga */
+  .sp[aria-busy='true']::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(100deg, transparent 30%, rgb(255 255 255 / .12) 50%, transparent 70%);
+    background-size: 250% 100%; animation: sp-brillo 1.6s ease-in-out infinite;
+  }
+  @keyframes sp-brillo { from { background-position: 150% 0; } to { background-position: -100% 0; } }
+
+  .sp :global(.sp__iframe) { position: absolute; inset: 0; z-index: 1; width: 100%; height: 152px; border: 0; opacity: 0; transition: opacity .35s ease; }
+  .sp :global(.sp__iframe--visible) { opacity: 1; }
+
+  @media (max-width: 420px) {
+    .sp__esqueleto { gap: 12px; padding: 12px; }
+    .sp__esqueleto :global(.sp__portada) { width: 96px; height: 96px; }
+    .sp__titulo { -webkit-line-clamp: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sp[aria-busy='true']::after { animation: none; }
+  }
 </style>

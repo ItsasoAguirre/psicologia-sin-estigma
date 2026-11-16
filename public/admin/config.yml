@@ -127,11 +127,24 @@ collections:
                 name: episodios
                 widget: list
                 summary: "{{fields.titulo}}"
-                hint: Pega el enlace de Spotify del episodio (botón Compartir → Copiar enlace). Se mostrará el reproductor automáticamente.
+                hint: Pega el enlace de Spotify del episodio (Compartir → Copiar enlace). En la web se ve una tarjeta igual que el reproductor de Spotify, que solo se carga al pulsarla. Copia el título, la fecha y la duración tal como aparecen en Spotify.
                 fields:
-                  - label: Nombre
+                  - label: Título del episodio
                     name: titulo
                     widget: string
+                  - label: Fecha y programa
+                    name: subtitulo
+                    widget: string
+                    required: false
+                    hint: "Por ejemplo: 26 abr · Mamarrachas y profundas."
+                  - label: Duración
+                    name: duracion
+                    widget: string
+                    required: false
+                    pattern:
+                      - '^(\d{1,2}:)?\d{1,2}:\d{2}$'
+                      - Escríbela como en Spotify, por ejemplo 28:24
+                    hint: "Por ejemplo: 28:24"
                   - label: Enlace de Spotify
                     name: url
                     widget: string
