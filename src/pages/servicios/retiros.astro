@@ -55,7 +55,7 @@ const fotos: string[] = p.fotos ?? [];
               {g.imagenes.map((r, i) => {
                 // Las reseñas son fotos de notas escritas a mano: la transcripción es su texto alternativo.
                 const alt = r.transcripcion?.trim() ? `Reseña escrita a mano: «${r.transcripcion.trim()}»` : `Reseña escrita a mano ${i + 1} de ${g.titulo}`;
-                return <li><button data-ampliar={r.imagen} data-alt={alt} aria-label={`Ampliar. ${alt}`}><Img src={r.imagen} alt="" sizes="(max-width: 900px) 30vw, 140px" /></button></li>;
+                return <li><button data-ampliar={r.imagen} data-alt={alt} aria-label={`Ampliar. ${alt}`}><Img src={r.imagen} alt="" sizes="(max-width: 900px) 30vw, 140px" diferida /><noscript><img src={r.imagen} alt="" /></noscript></button></li>;
               })}
             </ul>
           </div>
@@ -118,6 +118,19 @@ const fotos: string[] = p.fotos ?? [];
     c.querySelector('[data-sig]')!.addEventListener('click', () => ir(i + 1, true));
     btnPausa.addEventListener('click', () => { pausado = !pausado; pintar(); });
   });
+
+  // Miniaturas de reseñas: se descargan al acercarse a la galería, para no competir con la
+  // imagen principal de la página (en conexiones lentas el navegador adelanta las "lazy").
+  const miniaturas = document.querySelectorAll<HTMLImageElement>('.miniaturas img[data-src]');
+  const cargarMini = (img: HTMLImageElement) => {
+    if (img.dataset.srcset) { img.sizes = img.dataset.sizes ?? ''; img.srcset = img.dataset.srcset; }
+    img.src = img.dataset.src!;
+    delete img.dataset.src;
+  };
+  const obsMini = new IntersectionObserver((entradas) => {
+    for (const e of entradas) if (e.isIntersecting) { obsMini.unobserve(e.target); cargarMini(e.target as HTMLImageElement); }
+  }, { rootMargin: '400px 0px' });
+  miniaturas.forEach((m) => obsMini.observe(m));
 
   const visor = document.querySelector<HTMLDialogElement>('.visor')!;
   document.querySelectorAll<HTMLButtonElement>('[data-ampliar]').forEach((b) => b.addEventListener('click', () => {

@@ -6,7 +6,7 @@ describe('imágenes responsive', () => {
     expect(anchosPara(700)).toEqual([160, 320, 640, 700]);
     expect(anchosPara(120)).toEqual([120]);
   });
-  it('limita las grandes a 1600', () => expect(anchosPara(4000)).toEqual([160, 320, 640, 1024, 1600]));
+  it('limita las grandes a 1600', () => expect(anchosPara(4000)).toEqual([160, 320, 640, 768, 1024, 1600]));
   it('ruta de la versión WebP', () => {
     expect(rutaVariante('/uploads/retiros/foto 1.JPG', 320)).toBe('/uploads/_v/320/retiros/foto 1.webp');
     expect(rutaVariante('/uploads/icono.svg', 480)).toBeNull();

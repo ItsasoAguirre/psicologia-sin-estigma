@@ -37,7 +37,7 @@ export function analizarBrevo(valor = '') {
 // ---------- Imágenes responsive ----------
 // Las versiones las crea scripts/optimizar-imagenes.mjs tras compilar; el componente <Img>
 // las enlaza en `srcset`. Ambos usan estas funciones para coincidir exactamente.
-export const ANCHOS = [160, 320, 640, 1024, 1600];
+export const ANCHOS = [160, 320, 640, 768, 1024, 1600];
 const REDIMENSIONABLE = /\.(jpe?g|png|webp|avif)$/i;
 
 /** Anchos que tendrá una imagen según su ancho original (nunca se agranda). */
