@@ -7,6 +7,17 @@ Web estática (Astro) editada por su dueña, sin conocimientos técnicos, desde 
   Si añades un dato a una página, añade su campo en `config.yml` (un test lo comprueba).
 - Funciones puras en `src/lib/utilidades.js` (con tests). La carga de datos está en `src/lib/datos.js`.
 - Textos de la web en español. El lenguaje inclusivo (les, une misme, juntes…) es intencionado.
+- Web 100 % estática (Netlify sirve `dist/`): no añadas adaptadores SSR ni código de servidor,
+  aunque la skill `astro` los mencione.
+- Diseño: respeta la identidad existente (morados del logo, verde en servicios, cuaderno/pósits,
+  tipografías Atkinson Hyperlegible + Caveat/Patrick Hand) y la accesibilidad (movimiento reducido,
+  foco visible, sin sobreestimulación). Para cambios visuales usa la skill `frontend-design`.
+
+## Skills del proyecto (`.claude/skills/`)
+
+- `verificar-cambios` (propia) + subagente `revisor-contenido`: revisión de cambios de contenido.
+- `frontend-design` (Anthropic, Apache 2.0): criterios de diseño visual.
+- `astro` (astrolicious/agent-skills, MIT): referencia de Astro; consulta siempre docs.astro.build.
 
 ## Comandos
 
