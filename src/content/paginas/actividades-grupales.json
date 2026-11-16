@@ -1,0 +1,23 @@
+{
+  "titulo": "Actividades grupales",
+  "imagen": "/uploads/grupo1.jpg",
+  "intro": "Sigue las redes sociales o la newsletter para enterarte de las próximas actividades 😊\n\nTambién disponibles para empresas, asociaciones o cualquier grupo u organización que las solicite.",
+  "talleres_titulo": "Oferta de talleres grupales",
+  "talleres": [
+    "Mindfulness",
+    "Resolución de conflictos",
+    "Juegos de mesa",
+    "¿Qué opresiones y privilegios nos atraviesan?",
+    "Comunicación asertiva",
+    "Comunicación asertiva para profesionales sanitarios",
+    "Estrategias de gestión emocional",
+    "Crianza positiva",
+    "Afrontando la ansiedad social",
+    "Aceptar mis pensamientos a través del collage",
+    "Club de lectura",
+    "Desmontando el amor romántico",
+    "Afrontar la dependencia emocional",
+    "Mejorar la relación con mi cuerpo y con la comida"
+  ],
+  "cta": "Solicitar un taller para tu grupo u organización"
+}

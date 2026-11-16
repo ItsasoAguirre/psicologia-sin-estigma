@@ -1,0 +1,168 @@
+---
+import '../styles/global.css';
+import Icono from '../components/Icono.astro';
+import { ajustes, servicios } from '../lib/datos.js';
+
+interface Props { titulo?: string; descripcion?: string }
+const { titulo, descripcion = ajustes.descripcion } = Astro.props;
+const tituloCompleto = titulo ? `${titulo} · ${ajustes.nombre}` : ajustes.nombre;
+const ruta = Astro.url.pathname.replace(/\/$/, '') || '/';
+const activa = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWith(href));
+const tel = ajustes.telefono?.replace(/\s/g, '');
+---
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{tituloCompleto}</title>
+  <meta name="description" content={descripcion} />
+  <meta property="og:title" content={tituloCompleto} />
+  <meta property="og:description" content={descripcion} />
+  <meta property="og:image" content={new URL(ajustes.logo, Astro.site)} />
+  <link rel="icon" href={ajustes.logo} />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Caveat:wght@600;700&family=Patrick+Hand&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <a class="saltar sr-only" href="#contenido">Saltar al contenido</a>
+  <header class="cabecera">
+    <div class="contenedor cabecera__fila">
+      <a href="/" class="marca" aria-label={`${ajustes.nombre}, inicio`}>
+        <img src={ajustes.logo} alt="" width="56" height="56" />
+        <span class="marca__nombre">{ajustes.nombre}</span>
+      </a>
+      <button class="menu-movil" aria-expanded="false" aria-controls="navegacion">
+        <Icono nombre="menu" /><span class="sr-only">Menú</span>
+      </button>
+      <nav id="navegacion" class="nav" aria-label="Principal">
+        <ul>
+          <li><a href="/" aria-current={activa('/') ? 'page' : undefined}>Inicio</a></li>
+          <li><a href="/sobre-mi" aria-current={activa('/sobre-mi') ? 'page' : undefined}>Sobre mí</a></li>
+          <li class="desplegable">
+            <button class="desplegable__boton" aria-expanded="false" aria-controls="submenu-servicios" data-activa={activa('/servicios') || undefined}>
+              Servicios <Icono nombre="abajo" size={18} />
+            </button>
+            <ul id="submenu-servicios" class="submenu">
+              {servicios.map((s) => <li><a href={s.href} aria-current={activa(s.href) ? 'page' : undefined}>{s.texto}</a></li>)}
+            </ul>
+          </li>
+          <li><a href="/recursos" aria-current={activa('/recursos') ? 'page' : undefined}>Recursos</a></li>
+          <li><a class="nav__contacto" href="/contacto" aria-current={activa('/contacto') ? 'page' : undefined}>Contacto</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido"><slot /></main>
+
+  <footer class="pie">
+    <div class="contenedor pie__rejilla">
+      <div>
+        <img src={ajustes.logo} alt="" width="88" height="88" loading="lazy" />
+        <p class="pie__nombre">{ajustes.nombre}</p>
+        <p class="pie__peq">{ajustes.colegiada}</p>
+      </div>
+      <div>
+        <h2 class="pie__titulo">Contacto</h2>
+        <ul class="pie__lista">
+          <li><Icono nombre="email" size={20} /><a href={`mailto:${ajustes.email}`}>{ajustes.email}</a></li>
+          {ajustes.telefono && <li><Icono nombre="telefono" size={20} /><span><a href={`tel:${tel}`}>{ajustes.telefono}</a><br /><span class="pie__peq">{ajustes.horario}</span></span></li>}
+          {ajustes.instagram_url && <li><Icono nombre="instagram" size={20} /><a href={ajustes.instagram_url} target="_blank" rel="noopener">{ajustes.instagram_usuario}</a></li>}
+        </ul>
+      </div>
+      <div>
+        <h2 class="pie__titulo">Servicios</h2>
+        <ul class="pie__lista pie__lista--simple">
+          {servicios.map((s) => <li><a href={s.href}>{s.texto}</a></li>)}
+        </ul>
+      </div>
+    </div>
+    <div class="contenedor pie__legal">
+      <span>© {new Date().getFullYear()} {ajustes.nombre}</span>
+      <a href="/aviso-legal">Aviso legal</a>
+      <a href="/privacidad">Política de privacidad</a>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('navegacion');
+    const botonMenu = document.querySelector<HTMLButtonElement>('.menu-movil');
+    botonMenu?.addEventListener('click', () => {
+      const abierto = botonMenu.getAttribute('aria-expanded') === 'true';
+      botonMenu.setAttribute('aria-expanded', String(!abierto));
+      nav?.classList.toggle('abierta', !abierto);
+    });
+    const desp = document.querySelector<HTMLButtonElement>('.desplegable__boton');
+    desp?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      desp.setAttribute('aria-expanded', String(desp.getAttribute('aria-expanded') !== 'true'));
+    });
+    document.addEventListener('click', (e) => {
+      if (desp && !(e.target as Element).closest('.desplegable')) desp.setAttribute('aria-expanded', 'false');
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') desp?.setAttribute('aria-expanded', 'false'); });
+  </script>
+</body>
+</html>
+
+<style>
+  .saltar:focus { position: fixed; top: .5rem; left: .5rem; width: auto; height: auto; clip: auto; z-index: 100; background: #fff; padding: .5rem 1rem; border-radius: 8px; }
+  .cabecera { position: sticky; top: 0; z-index: 50; background: rgba(253, 251, 255, .92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--borde); }
+  .cabecera__fila { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 76px; }
+  .marca { display: flex; align-items: center; gap: .75rem; text-decoration: none; }
+  .marca img { width: 56px; height: 56px; object-fit: contain; }
+  .marca__nombre { font-family: var(--f-mano); font-size: 1.9rem; font-weight: 700; color: var(--morado-800); line-height: 1; }
+
+  .nav > ul { list-style: none; display: flex; align-items: center; gap: .25rem; margin: 0; padding: 0; }
+  .nav a, .desplegable__boton {
+    display: inline-flex; align-items: center; gap: .25rem; padding: .55rem .85rem; border-radius: 999px;
+    color: var(--texto); text-decoration: none; font: inherit; font-weight: 700; background: none; border: 0; cursor: pointer;
+  }
+  .nav a:hover, .desplegable__boton:hover { background: var(--lila-100); color: var(--morado-700); }
+  .nav a[aria-current='page'], .desplegable__boton[data-activa] { color: var(--morado-700); background: var(--lila-100); }
+  .nav .nav__contacto { background: var(--morado-700); color: #fff; }
+  .nav .nav__contacto:hover, .nav .nav__contacto[aria-current='page'] { background: var(--morado-800); color: #fff; }
+
+  .desplegable { position: relative; }
+  .desplegable__boton :global(.icono) { transition: transform .2s; }
+  .desplegable__boton[aria-expanded='true'] :global(.icono) { transform: rotate(180deg); }
+  .submenu {
+    list-style: none; margin: 0; padding: .5rem; position: absolute; top: calc(100% + .4rem); left: 50%; translate: -50% 0;
+    min-width: 250px; background: var(--verde-600); border-radius: var(--radio); box-shadow: var(--sombra);
+    display: none;
+  }
+  .desplegable__boton[aria-expanded='true'] + .submenu { display: block; }
+  @media (hover: hover) and (min-width: 901px) {
+    .desplegable:hover .submenu { display: block; }
+    .desplegable::after { content: ''; position: absolute; inset: 100% 0 auto; height: .5rem; }
+  }
+  .submenu a { display: block; color: #fff; border-radius: 8px; padding: .6rem .9rem; }
+  .submenu a:hover, .submenu a[aria-current='page'] { background: var(--verde-800); color: #fff; }
+
+  .menu-movil { display: none; background: none; border: 0; color: var(--morado-800); padding: .5rem; cursor: pointer; }
+  @media (max-width: 900px) {
+    .menu-movil { display: block; }
+    .marca__nombre { font-size: 1.6rem; }
+    .nav { display: none; position: absolute; inset: 100% 0 auto; background: var(--fondo); border-bottom: 1px solid var(--borde); padding: 1rem 1.25rem 1.5rem; max-height: calc(100vh - 76px); overflow: auto; }
+    .nav.abierta { display: block; }
+    .nav > ul { flex-direction: column; align-items: stretch; }
+    .nav a, .desplegable__boton { width: 100%; justify-content: space-between; padding: .8rem 1rem; }
+    .submenu { position: static; translate: none; margin-top: .25rem; box-shadow: none; }
+  }
+
+  .pie { background: var(--morado-900); color: #e9e1f7; margin-top: 0; padding-top: 3.5rem; }
+  .pie a { color: #fff; }
+  .pie__rejilla { display: grid; grid-template-columns: 1.2fr 1.4fr 1fr; gap: 2.5rem; }
+  .pie__nombre { font-family: var(--f-mano); font-size: 1.8rem; margin: .5rem 0 0; color: #fff; }
+  .pie__titulo { color: #fff; font-size: 1.1rem; margin-top: 0; }
+  .pie__peq { font-size: .9rem; color: #c9bbe4; }
+  .pie__lista { list-style: none; padding: 0; margin: 0; display: grid; gap: .8rem; }
+  .pie__lista li { display: flex; gap: .6rem; align-items: flex-start; }
+  .pie__lista :global(.icono) { flex: none; margin-top: .2rem; color: var(--verde-200); }
+  .pie__lista--simple { gap: .4rem; }
+  .pie__legal { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; border-top: 1px solid rgba(255,255,255,.15); margin-top: 2.5rem; padding-block: 1.25rem 1.5rem; font-size: .9rem; color: #c9bbe4; }
+  .pie__legal a { color: #c9bbe4; }
+  @media (max-width: 760px) { .pie__rejilla { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,22 @@
+---
+// Muestra un formulario de Brevo. En el panel se puede pegar el código de inserción
+// completo (empieza por "<") o solo la dirección del formulario.
+import { ajustes } from '../lib/datos.js';
+interface Props { codigo?: string; alto?: number; titulo: string }
+const { codigo = '', alto = 560, titulo } = Astro.props;
+const valor = (codigo ?? '').trim();
+const esHtml = valor.startsWith('<');
+---
+{valor ? (
+  esHtml
+    ? <div class="brevo" set:html={valor} />
+    : <iframe class="brevo" src={valor} title={titulo} height={alto} loading="lazy" allowfullscreen></iframe>
+) : (
+  <p class="brevo-vacio">
+    El formulario estará disponible muy pronto. Mientras tanto, escríbeme a{" "}<a href={`mailto:${ajustes.email}`}>{ajustes.email}</a>.
+  </p>
+)}
+<style>
+  .brevo { width: 100%; max-width: 560px; border: 0; display: block; margin-inline: auto; background: transparent; }
+  .brevo-vacio { background: var(--superficie); border: 1px dashed var(--borde); border-radius: var(--radio); padding: 1rem 1.25rem; }
+</style>

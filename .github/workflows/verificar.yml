@@ -1,0 +1,87 @@
+# Se ejecuta con cada cambio guardado desde el panel (cada borrador es una "pull request"
+# en una rama cms/...) y con cada publicación en main.
+name: Verificar cambios
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: verificar-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    name: Tests (contenido, unitarios y navegador)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Validar contenido
+        run: npm run validar
+      - name: Tests unitarios
+        run: npm test
+      - name: Instalar navegador
+        run: npx playwright install --with-deps chromium
+      - name: Tests de navegador (Playwright)
+        run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: informe-playwright
+          path: playwright-report
+          retention-days: 7
+
+  # Revisión editorial con Claude, solo para los cambios hechos desde el panel.
+  # Deja un comentario en español en el borrador (GitHub lo envía por email).
+  # Opcional: necesita el secreto ANTHROPIC_API_KEY; sin él, este paso se omite.
+  revision:
+    name: Revisión del contenido (Claude)
+    needs: tests
+    if: always() && github.event_name == 'pull_request' && startsWith(github.head_ref, 'cms/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      id-token: write
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - name: Sin clave de Anthropic
+        if: env.ANTHROPIC_API_KEY == ''
+        run: echo "::notice::No hay ANTHROPIC_API_KEY configurada; se omite la revisión con IA."
+      - uses: actions/checkout@v4
+        if: env.ANTHROPIC_API_KEY != ''
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        if: env.ANTHROPIC_API_KEY != ''
+        with:
+          node-version: 22
+          cache: npm
+      - if: env.ANTHROPIC_API_KEY != ''
+        run: npm ci
+      - uses: anthropics/claude-code-action@v1
+        if: env.ANTHROPIC_API_KEY != ''
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: |
+            Sigue la skill /verificar-cambios (.claude/skills/verificar-cambios/SKILL.md) en modo CI.
+            - Pull request: #${{ github.event.pull_request.number }} en ${{ github.repository }}
+            - Rama: ${{ github.head_ref }}
+            - Resultado de los tests automáticos: ${{ needs.tests.result }}
+            Publica el informe con: gh pr comment ${{ github.event.pull_request.number }} --body-file informe.md
+          claude_args: >-
+            --max-turns 30
+            --allowedTools "Read,Glob,Grep,Write,Task,Bash(npm run validar),Bash(npm test),Bash(git diff:*),Bash(git log:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*)"

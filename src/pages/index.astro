@@ -1,0 +1,106 @@
+---
+import Base from '../layouts/Base.astro';
+import Icono from '../components/Icono.astro';
+import Newsletter from '../components/Newsletter.astro';
+import Resenas from '../components/Resenas.astro';
+import { pagina, ajustes, spotify } from '../lib/datos.js';
+const p = pagina('inicio');
+---
+<Base>
+  <section class="hero">
+    <div class="contenedor dos-col">
+      <div>
+        <img class="hero__logo" src={ajustes.logo} alt={ajustes.nombre} width="180" height="180" />
+        <h1>{p.hero.titulo}</h1>
+        <p class="hero__texto">{p.hero.texto}</p>
+        <a class="boton" href="/servicios/psicoterapia">{p.hero.boton} <Icono nombre="flecha" size={18} /></a>
+      </div>
+      <img class="foto hero__foto" src={p.hero.imagen} alt="" width="900" height="650" />
+    </div>
+  </section>
+
+  <section class="valores" aria-label="Cómo trabajo">
+    <ul class="contenedor valores__lista">
+      {p.valores.map((v) => (
+        <li><span class="valores__ic"><Icono nombre={v.icono} size={28} /></span>{v.texto}</li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="seccion seccion--lila" id="newsletter">
+    <div class="contenedor estrecho newsletter">
+      <img src={p.newsletter.imagen} alt="" loading="lazy" width="200" height="100" />
+      <h2>{p.newsletter.titulo}</h2>
+      <p>{p.newsletter.texto}</p>
+      <Newsletter boton={p.newsletter.boton} exito={p.newsletter.mensaje_exito} />
+    </div>
+  </section>
+
+  <section class="seccion" id="podcast">
+    <div class="contenedor dos-col">
+      <img class="foto podcast__img" src={p.podcast.imagen} alt="" loading="lazy" width="700" height="500" />
+      <div>
+        <h2>{p.podcast.titulo}</h2>
+        <p>{p.podcast.texto}</p>
+        <div class="podcast__episodios">
+          {p.podcast.episodios.map((e) => {
+            const src = spotify(e.url);
+            return src
+              ? <iframe src={src} title={`${p.podcast.titulo}: ${e.titulo}`} width="100%" height="152" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" style="border:0;border-radius:12px"></iframe>
+              : <a class="boton boton--borde" href={e.url} target="_blank" rel="noopener">{e.titulo} <Icono nombre="enlace" size={18} /></a>;
+          })}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion seccion--lila" id="resenas">
+    <div class="contenedor">
+      <div class="resenas__cabecera">
+        <img src={p.resenas.imagen} alt="" loading="lazy" width="320" height="213" />
+        <div>
+          <h2>{p.resenas.titulo}</h2>
+          <p>{p.resenas.texto}</p>
+        </div>
+      </div>
+      <Resenas />
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="contenedor contacto-rapido">
+      <h2>¿Hablamos?</h2>
+      <p>Escríbeme a <a href={`mailto:${ajustes.email}`}>{ajustes.email}</a>{ajustes.telefono && <> o llámame al <a href={`tel:${ajustes.telefono.replace(/\s/g, '')}`}>{ajustes.telefono}</a></>}.</p>
+      <div class="contacto-rapido__acciones">
+        <a class="boton" href="/contacto">Ir a contacto</a>
+        {ajustes.instagram_url && <a class="boton boton--borde" href={ajustes.instagram_url} target="_blank" rel="noopener"><Icono nombre="instagram" size={18} /> {ajustes.instagram_usuario}</a>}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { padding-block: clamp(2rem, 6vw, 4.5rem); background: radial-gradient(ellipse at 90% 10%, var(--lila-100), transparent 60%); }
+  .hero__logo { width: 120px; height: 120px; object-fit: contain; margin-bottom: 1rem; }
+  .hero__texto { font-size: 1.2rem; color: var(--texto-suave); margin-bottom: 1.75rem; }
+  .hero__foto { aspect-ratio: 4 / 3; }
+
+  .valores { background: var(--morado-800); color: #fff; padding-block: 2rem; }
+  .valores__lista { list-style: none; padding: 0; margin-block: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+  .valores__lista li { display: flex; align-items: center; gap: .9rem; font-weight: 700; line-height: 1.35; }
+  .valores__ic { flex: none; width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.12); color: var(--verde-200); }
+  @media (max-width: 900px) { .valores__lista { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .valores__lista { grid-template-columns: 1fr; } }
+
+  .podcast__img { max-width: 420px; margin-inline: auto; }
+  .podcast__episodios { display: grid; gap: .75rem; margin-top: 1.5rem; }
+
+  .resenas__cabecera { display: flex; align-items: center; gap: 2rem; }
+  .resenas__cabecera img { width: 220px; flex: none; mix-blend-mode: multiply; }
+  @media (max-width: 640px) { .resenas__cabecera { flex-direction: column; align-items: flex-start; gap: 1rem; } .resenas__cabecera img { width: 170px; } }
+
+  .newsletter { text-align: center; }
+  .newsletter img { width: 140px; margin: 0 auto 1rem; }
+  .contacto-rapido { text-align: center; }
+  .contacto-rapido__acciones { display: flex; flex-wrap: wrap; gap: .75rem; justify-content: center; margin-top: 1.25rem; }
+</style>

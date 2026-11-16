@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/Base.astro';
+import { pagina, md } from '../lib/datos.js';
+export function getStaticPaths() {
+  return [{ params: { legal: 'privacidad' } }, { params: { legal: 'aviso-legal' } }];
+}
+const p = pagina(Astro.params.legal);
+---
+<Base titulo={p.titulo}>
+  <section class="seccion">
+    <div class="contenedor estrecho">
+      <h1>{p.titulo}</h1>
+      <div class="prosa" set:html={md(p.cuerpo)} />
+    </div>
+  </section>
+</Base>

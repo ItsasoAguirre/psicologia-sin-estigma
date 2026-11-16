@@ -1,0 +1,90 @@
+---
+// Formulario de suscripción con el diseño de la web. Envía los datos al formulario de Brevo
+// que la dueña ya tiene creado (se configura en el panel → Ajustes generales).
+import Icono from './Icono.astro';
+import { ajustes } from '../lib/datos.js';
+import { analizarBrevo } from '../lib/utilidades.js';
+
+interface Props { boton?: string; exito?: string }
+const { boton = 'Suscribirme', exito = '¡Gracias! Revisa tu correo para confirmar la suscripción.' } = Astro.props;
+const brevo = analizarBrevo(ajustes.brevo_newsletter);
+---
+{brevo?.accion ? (
+  <form class="nl" method="post" action={brevo.accion} target="nl-envio" data-newsletter data-exito={exito}>
+    <div class="nl__campos">
+      {brevo.campoNombre && (
+        <label class="nl__campo">
+          <span>Nombre</span>
+          <input name={brevo.campoNombre} type="text" autocomplete="given-name" />
+        </label>
+      )}
+      <label class="nl__campo">
+        <span>Correo electrónico</span>
+        <input name="EMAIL" type="email" autocomplete="email" required />
+      </label>
+    </div>
+    <label class="nl__consentimiento">
+      <input name="OPT_IN" value="1" type="checkbox" required />
+      <span>Acepto recibir la newsletter y he leído la <a href="/privacidad" target="_blank">política de privacidad</a>. Puedes darte de baja cuando quieras.</span>
+    </label>
+    <!-- Campo trampa para bots: las personas no lo ven -->
+    <input class="nl__trampa" type="text" name="email_address_check" value="" tabindex="-1" autocomplete="off" aria-hidden="true" />
+    <input type="hidden" name="locale" value="es" />
+    <button class="boton" type="submit">{boton} <Icono nombre="email" size={18} /></button>
+    <p class="nl__estado" role="status" aria-live="polite"></p>
+    <iframe name="nl-envio" title="Envío del formulario" hidden></iframe>
+  </form>
+) : (
+  <p class="nl__vacio">
+    El formulario estará disponible muy pronto. Mientras tanto, escríbeme a{' '}<a href={`mailto:${ajustes.email}`}>{ajustes.email}</a>.
+  </p>
+)}
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('[data-newsletter]').forEach((form) => {
+    const estado = form.querySelector<HTMLElement>('.nl__estado')!;
+    const boton = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+    const terminar = (texto: string, ok: boolean) => {
+      estado.textContent = texto;
+      estado.dataset.tipo = ok ? 'ok' : 'error';
+      boton.disabled = false;
+      if (ok) form.reset();
+    };
+    // El formulario se envía a Brevo dentro de un marco oculto (sin salir de la web).
+    // Cuando Brevo responde, el marco termina de cargar y mostramos el mensaje.
+    const marco = form.querySelector('iframe')!;
+    let enviando = false;
+    marco.addEventListener('load', () => { if (enviando) { enviando = false; terminar(form.dataset.exito!, true); } });
+    form.addEventListener('submit', (e) => {
+      if ((form.elements.namedItem('email_address_check') as HTMLInputElement).value) {
+        e.preventDefault();
+        return terminar(form.dataset.exito!, true);
+      }
+      enviando = true;
+      boton.disabled = true;
+      estado.dataset.tipo = '';
+      estado.textContent = 'Enviando…';
+      setTimeout(() => { if (enviando) { enviando = false; terminar('No hemos podido confirmar el envío. Revisa tu conexión e inténtalo de nuevo.', false); } }, 15000);
+    });
+  });
+</script>
+
+<style>
+  .nl { display: grid; gap: 1rem; max-width: 520px; margin-inline: auto; text-align: left; }
+  .nl__campos { display: grid; gap: .75rem; }
+  .nl__campo { display: grid; gap: .3rem; font-weight: 700; color: var(--morado-800); }
+  .nl__campo input {
+    font: inherit; font-weight: 400; padding: .8rem 1rem; border-radius: var(--radio);
+    border: 2px solid var(--borde); background: #fff; color: var(--texto);
+  }
+  .nl__campo input:focus { border-color: var(--morado-500); outline: none; }
+  .nl__consentimiento { display: flex; gap: .6rem; align-items: flex-start; font-size: .95rem; color: var(--texto-suave); }
+  .nl__consentimiento input { width: 1.2rem; height: 1.2rem; margin-top: .25rem; accent-color: var(--morado-700); flex: none; }
+  .nl .boton { justify-self: center; }
+  .nl .boton:disabled { opacity: .6; cursor: wait; }
+  .nl__trampa { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+  .nl__estado { margin: 0; text-align: center; font-weight: 700; min-height: 1.5em; }
+  .nl__estado[data-tipo='ok'] { color: var(--verde-800); }
+  .nl__estado[data-tipo='error'] { color: #b42318; }
+  .nl__vacio { background: var(--superficie); border: 1px dashed var(--borde); border-radius: var(--radio); padding: 1rem 1.25rem; }
+</style>

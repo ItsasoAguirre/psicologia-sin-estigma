@@ -1,0 +1,142 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icono from '../../components/Icono.astro';
+import { pagina, md } from '../../lib/datos.js';
+const p = pagina('retiros');
+const fotos: string[] = p.fotos ?? [];
+---
+<Base titulo={p.titulo}>
+  <section class="portada">
+    <img src={p.imagen} alt={p.titulo} width="2000" height="1125" />
+  </section>
+
+  <section class="seccion">
+    <div class="contenedor">
+      <h1 class="sr-only">{p.titulo}</h1>
+      <div class="tipos">
+        {p.tipos.map((t) => (
+          <article class="tipo">
+            <h2>{t.titulo}</h2>
+            <div class="prosa" set:html={md(t.texto)} />
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion seccion--lila">
+    <div class="contenedor galeria">
+      <div>
+        <h2 class="mano galeria__titulo">{p.galeria_titulo}</h2>
+        {fotos.length > 0 && (
+          <div class="carrusel" data-carrusel aria-roledescription="carrusel" aria-label={p.galeria_titulo}>
+            <div class="carrusel__pista">
+              {fotos.map((f, i) => (
+                <img src={f} alt={`Foto de un retiro anterior (${i + 1} de ${fotos.length})`} loading={i < 2 ? 'eager' : 'lazy'} class={i === 0 ? 'activa' : ''} width="1400" height="1050" />
+              ))}
+            </div>
+            <div class="carrusel__controles">
+              <button data-ant aria-label="Foto anterior"><Icono nombre="izquierda" /></button>
+              <button data-pausa aria-label="Pausar"><Icono nombre="pausa" class="ic-pausa" /><Icono nombre="play" class="ic-play" /></button>
+              <button data-sig aria-label="Foto siguiente"><Icono nombre="derecha" /></button>
+              <span class="carrusel__contador" aria-live="polite"><span data-n>1</span> / {fotos.length}</span>
+            </div>
+          </div>
+        )}
+      </div>
+      <div>
+        <h2 class="mano galeria__titulo">{p.resenas_titulo}</h2>
+        {p.resenas?.map((g) => (
+          <div class="grupo">
+            <h3>{g.titulo}</h3>
+            <ul class="miniaturas">
+              {g.imagenes.map((img, i) => (
+                <li><button data-ampliar={img} aria-label={`Ver reseña ${i + 1} de ${g.titulo}`}><img src={img} alt="" loading="lazy" width="300" height="400" /></button></li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="contenedor estrecho cierre">
+      <div class="prosa" set:html={md(p.cierre)} />
+      <a class="boton" href="/contacto">{p.cta} <Icono nombre="flecha" size={18} /></a>
+    </div>
+  </section>
+
+  <dialog class="visor" aria-label="Reseña ampliada">
+    <button class="visor__cerrar" aria-label="Cerrar"><Icono nombre="cerrar" /></button>
+    <img alt="Reseña escrita a mano de un retiro" />
+  </dialog>
+</Base>
+
+<script>
+  // Carrusel lento, con pausa, y que no se mueve solo si la persona prefiere menos movimiento.
+  document.querySelectorAll<HTMLElement>('[data-carrusel]').forEach((c) => {
+    const imgs = [...c.querySelectorAll('img')];
+    const n = c.querySelector('[data-n]')!;
+    const btnPausa = c.querySelector<HTMLButtonElement>('[data-pausa]')!;
+    let i = 0;
+    let pausado = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const ir = (k: number) => {
+      imgs[i].classList.remove('activa');
+      i = (k + imgs.length) % imgs.length;
+      imgs[i].classList.add('activa');
+      n.textContent = String(i + 1);
+    };
+    const pintar = () => { c.classList.toggle('pausado', pausado); btnPausa.setAttribute('aria-label', pausado ? 'Reanudar' : 'Pausar'); };
+    pintar();
+    setInterval(() => { if (!pausado && !c.matches(':hover')) ir(i + 1); }, 6000);
+    c.querySelector('[data-ant]')!.addEventListener('click', () => ir(i - 1));
+    c.querySelector('[data-sig]')!.addEventListener('click', () => ir(i + 1));
+    btnPausa.addEventListener('click', () => { pausado = !pausado; pintar(); });
+  });
+
+  const visor = document.querySelector<HTMLDialogElement>('.visor')!;
+  document.querySelectorAll<HTMLButtonElement>('[data-ampliar]').forEach((b) => b.addEventListener('click', () => {
+    visor.querySelector('img')!.src = b.dataset.ampliar!;
+    visor.showModal();
+  }));
+  visor.querySelector('.visor__cerrar')!.addEventListener('click', () => visor.close());
+  visor.addEventListener('click', (e) => { if (e.target === visor) visor.close(); });
+</script>
+
+<style>
+  .portada img { width: 100%; max-height: 62vh; object-fit: cover; }
+  .tipos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .tipo { background: var(--superficie); border: 1px solid var(--borde); border-top: 6px solid var(--verde-600); border-radius: var(--radio-lg); padding: 1.5rem; }
+  .tipo h2 { font-size: 1.35rem; }
+  @media (max-width: 900px) { .tipos { grid-template-columns: 1fr; } }
+
+  .galeria { display: grid; grid-template-columns: 1.4fr 1fr; gap: clamp(2rem, 4vw, 3.5rem); align-items: start; }
+  @media (max-width: 900px) { .galeria { grid-template-columns: 1fr; } }
+  .galeria__titulo { font-size: 2.4rem; }
+
+  .carrusel__pista { position: relative; aspect-ratio: 4 / 3; border-radius: var(--radio-lg); overflow: hidden; box-shadow: var(--sombra); background: var(--morado-900); }
+  .carrusel__pista img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.4s ease; }
+  .carrusel__pista img.activa { opacity: 1; }
+  .carrusel__controles { display: flex; align-items: center; gap: .5rem; margin-top: .9rem; }
+  .carrusel__controles button { width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--morado-700); color: #fff; display: grid; place-items: center; cursor: pointer; }
+  .carrusel__controles button:hover { background: var(--morado-800); }
+  .carrusel__contador { margin-left: .5rem; color: var(--texto-suave); font-weight: 700; }
+  .carrusel :global(.ic-play) { display: none; }
+  .carrusel.pausado :global(.ic-play) { display: block; }
+  .carrusel.pausado :global(.ic-pausa) { display: none; }
+
+  .grupo h3 { margin: 1rem 0 .6rem; color: var(--verde-800); }
+  .miniaturas { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: .6rem; }
+  .miniaturas button { padding: 0; border: 0; background: none; cursor: zoom-in; width: 100%; border-radius: 10px; overflow: hidden; display: block; }
+  .miniaturas img { aspect-ratio: 3 / 4; object-fit: cover; width: 100%; transition: transform .3s; }
+  .miniaturas button:hover img { transform: scale(1.05); }
+
+  .cierre { text-align: center; }
+  .cierre .prosa { margin-bottom: 1.5rem; }
+
+  .visor { border: 0; padding: 0; background: transparent; max-width: min(900px, 100% - 1.5rem); max-height: 92vh; }
+  .visor::backdrop { background: rgba(36, 16, 70, .75); }
+  .visor img { max-height: 88vh; width: auto; margin-inline: auto; border-radius: 12px; }
+  .visor__cerrar { position: absolute; top: .5rem; right: .5rem; width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--morado-700); color: #fff; display: grid; place-items: center; cursor: pointer; }
+</style>

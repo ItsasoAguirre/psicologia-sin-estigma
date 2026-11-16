@@ -1,0 +1,20 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icono from '../../components/Icono.astro';
+import { servicios } from '../../lib/datos.js';
+---
+<Base titulo="Servicios">
+  <section class="seccion">
+    <div class="contenedor estrecho">
+      <h1>Servicios</h1>
+      <ul class="lista">
+        {servicios.map((s) => <li><a href={s.href}>{s.texto} <Icono nombre="flecha" size={20} /></a></li>)}
+      </ul>
+    </div>
+  </section>
+</Base>
+<style>
+  .lista { list-style: none; padding: 0; display: grid; gap: .75rem; }
+  .lista a { display: flex; justify-content: space-between; align-items: center; padding: 1.1rem 1.4rem; border-radius: var(--radio); background: var(--verde-600); color: #fff; font-weight: 700; text-decoration: none; font-size: 1.15rem; }
+  .lista a:hover { background: var(--verde-800); color: #fff; }
+</style>

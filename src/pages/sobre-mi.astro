@@ -1,0 +1,78 @@
+---
+import Base from '../layouts/Base.astro';
+import { pagina, ajustes, md } from '../lib/datos.js';
+const p = pagina('sobre-mi');
+const f = p.formacion;
+---
+<Base titulo={p.titulo}>
+  <section class="seccion">
+    <div class="contenedor sobre">
+      <div class="sobre__foto">
+        {p.foto
+          ? <img class="foto" src={p.foto} alt="Foto de la psicóloga" width="600" height="750" />
+          : <img class="sobre__logo" src={ajustes.logo} alt="" width="400" height="400" />}
+      </div>
+      <div>
+        <h1>{p.titulo}</h1>
+        <h2 class="mano sobre__sub">{p.personal_titulo}</h2>
+        <div class="prosa" set:html={md(p.personal)} />
+        {p.meme_imagen && (
+          <figure class="meme">
+            <img src={p.meme_imagen} alt={`Lisa Simpson: ${p.meme_texto}`} loading="lazy" width="480" height="270" />
+            <figcaption>{p.meme_texto}</figcaption>
+          </figure>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion seccion--lila">
+    <div class="contenedor estrecho">
+      <h2 class="mano sobre__sub">{p.profesional_titulo}</h2>
+      <div class="prosa" set:html={md(p.profesional)} />
+    </div>
+  </section>
+
+  <section class="seccion" id="formacion">
+    <div class="contenedor formacion">
+      <img class="foto formacion__img" src={f.imagen} alt={f.titulo} loading="lazy" width="600" height="800" />
+      <div>
+        <h2 class="sr-only">{f.titulo}</h2>
+        <ul class="titulos">
+          {f.principal.map((t) => <li>{t}</li>)}
+        </ul>
+        <h3>{f.complementaria_titulo}</h3>
+        <ul class="lista-formacion">{f.complementaria.map((t) => <li>{t}</li>)}</ul>
+        {f.otros?.length > 0 && <>
+          <h3>{f.otros_titulo}</h3>
+          <ul class="lista-formacion">{f.otros.map((t) => <li>{t}</li>)}</ul>
+        </>}
+        <p class="colegiada">{ajustes.colegiada}</p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .sobre { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(2rem, 5vw, 4rem); align-items: start; }
+  .sobre__foto { position: sticky; top: 100px; }
+  .sobre__logo { width: 100%; max-width: 380px; margin-inline: auto; }
+  .sobre__sub { font-size: 2.2rem; margin-bottom: .5rem; }
+  .meme { margin: 1.5rem 0 0; max-width: 420px; background: #fff; padding: .6rem .6rem .4rem; border-radius: 10px; box-shadow: var(--sombra); rotate: -1.5deg; }
+  .meme img { border-radius: 6px; }
+  .meme figcaption { font-family: var(--f-mano); font-size: 1.5rem; text-align: center; color: var(--morado-700); }
+
+  .formacion { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(2rem, 5vw, 4rem); align-items: start; }
+  .formacion__img { aspect-ratio: 3 / 4; position: sticky; top: 100px; }
+  .titulos { list-style: none; padding: 0; margin: 0 0 2rem; display: grid; gap: .75rem; }
+  .titulos li { background: var(--lila-100); border-left: 5px solid var(--morado-500); padding: .9rem 1.1rem; border-radius: 0 var(--radio) var(--radio) 0; font-weight: 700; color: var(--morado-800); }
+  .lista-formacion { padding-left: 1.2rem; display: grid; gap: .45rem; }
+  .lista-formacion li::marker { color: var(--verde-600); }
+  .colegiada { margin-top: 2rem; display: inline-block; font-weight: 700; color: var(--verde-800); background: var(--verde-50); border: 1px solid var(--verde-200); padding: .5rem 1rem; border-radius: 999px; }
+  @media (max-width: 820px) {
+    .sobre, .formacion { grid-template-columns: 1fr; }
+    .sobre__foto, .formacion__img { position: static; }
+    .sobre__logo { max-width: 220px; }
+    .formacion__img { max-width: 360px; }
+  }
+</style>

@@ -1,0 +1,91 @@
+{
+  "titulo": "Psicoterapia",
+  "intro": "Un espacio seguro para entender lo que te pasa y trabajar juntas hacia lo que es importante para ti.",
+  "pistas": {
+    "boton": "Pincha aquí para saber con qué te puedo ayudar",
+    "titulo": "Algunas pistas para saber si puedes beneficiarte de un apoyo profesional",
+    "imagen": "/uploads/perro.jpg",
+    "lista": [
+      "A menudo te sientes irritable, irascible, en estado de alerta, con la necesidad de defenderte.",
+      "Te cuesta relacionarte con la gente, crees que apenas tienes personas con las que contar o continuamente tienes conflictos con ellas.",
+      "Has sufrido una pérdida (ruptura, muerte de un ser querido, migración…) y no te crees capaz de superarla.",
+      "Miedo intenso a conducir, hablar en público, socializar, situaciones médicas, etc.",
+      "Miedo intenso a enfermar, acompañado de comprobaciones constantes sobre tu estado de salud.",
+      "Te cuesta poner límites y distanciarte de situaciones o personas que no te aportan.",
+      "Continuamente te asaltan pensamientos negativos o desagradables que te provocan angustia.",
+      "Sientes con mucha intensidad y no sabes cómo afrontar tus emociones.",
+      "Consideras que tu relación con la alimentación o con tu cuerpo es problemática.",
+      "A menudo consumes alcohol u otras drogas como vía de escape, y te cuesta controlarlo.",
+      "Te autolesionas o piensas con frecuencia que nada merece la pena.",
+      "Llevas tiempo sintiéndote perdido/a o con sensación de vacío.",
+      "Ya no disfrutas con cosas con las que antes sí o (casi) nada te hace disfrutar.",
+      "Llevas tiempo sintiéndote infeliz y no sabes cómo salir de ese estado."
+    ]
+  },
+  "ofrezco": {
+    "titulo": "¿Qué te ofrezco en mi espacio terapéutico?",
+    "lista": [
+      "Una explicación a lo que te pasa desde el punto de vista de la psicología y su conocimiento sobre el comportamiento humano.",
+      "Una propuesta de intervención para mejorar tus dificultades.",
+      "Un espacio amable de trabajo conjunto para que te sientas mejor."
+    ]
+  },
+  "modalidad": {
+    "titulo": "Modalidad",
+    "imagen": "/uploads/terapia2.png",
+    "opciones": [
+      {
+        "icono": "portatil",
+        "texto": "Online"
+      },
+      {
+        "icono": "silla",
+        "texto": "Presencial: domicilio o consulta (solo Bizkaia, consultar zona)."
+      }
+    ],
+    "nota": "Distintas tarifas según modalidad elegida."
+  },
+  "esquema": {
+    "titulo": "Esquema de la intervención",
+    "pasos": [
+      {
+        "icono": "email",
+        "texto": "Contacto por email, formulario o teléfono"
+      },
+      {
+        "icono": "portatil",
+        "texto": "Sesión informativa"
+      },
+      {
+        "icono": "boli",
+        "texto": "Firma del consentimiento informado y completar entrevista escrita antes de la primera sesión"
+      },
+      {
+        "icono": "portatil",
+        "texto": "Primera y segunda sesión: evaluación"
+      },
+      {
+        "icono": "portatil",
+        "texto": "Tercera sesión: devolución de resultados y acuerdo de objetivos terapéuticos"
+      },
+      {
+        "icono": "portatil",
+        "texto": "Cuarta sesión y siguientes: intervención hacia la consecución de los objetivos"
+      },
+      {
+        "icono": "check",
+        "texto": "Espaciado de sesiones: cuando la mejoría es significativa, se alarga el tiempo entre una sesión y la siguiente"
+      },
+      {
+        "icono": "corazon",
+        "texto": "Alta terapéutica: finalización de las sesiones"
+      }
+    ],
+    "nota": "La duración de una intervención completa depende de cada persona y sus circunstancias."
+  },
+  "sesion_informativa": {
+    "boton": "Solicitar sesión informativa gratuita",
+    "texto": "Te ofrezco hacer una videollamada o sesión telefónica de aprox. 10-15 minutos para solucionar dudas, ponernos cara y dar más información sobre lo que implica un proceso terapéutico y cuál es mi forma de trabajar. El objetivo es que te sirva para decidir, pero no te preocupes, no conlleva ningún compromiso."
+  },
+  "cta": "Solicita la sesión informativa, consulta tarifas o ¡reserva tu cita!"
+}

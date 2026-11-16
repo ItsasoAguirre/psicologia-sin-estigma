@@ -1,0 +1,39 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icono from '../../components/Icono.astro';
+import { pagina, ajustes, md } from '../../lib/datos.js';
+const p = pagina('actividades-grupales');
+---
+<Base titulo={p.titulo}>
+  <section class="seccion">
+    <div class="contenedor dos-col">
+      <div>
+        <p class="mano etiqueta">Servicios</p>
+        <h1>{p.titulo}</h1>
+        <div class="prosa" set:html={md(p.intro)} />
+        <div class="acciones">
+          {ajustes.instagram_url && <a class="boton boton--borde" href={ajustes.instagram_url} target="_blank" rel="noopener"><Icono nombre="instagram" size={18} /> Instagram</a>}
+          <a class="boton boton--borde" href="/#newsletter"><Icono nombre="email" size={18} /> Newsletter</a>
+        </div>
+      </div>
+      <img class="foto" src={p.imagen} alt="" width="700" height="500" />
+    </div>
+  </section>
+  <section class="seccion seccion--lila">
+    <div class="contenedor">
+      <h2>{p.talleres_titulo}</h2>
+      <ul class="talleres">
+        {p.talleres.map((t) => <li><Icono nombre="hoja" size={20} />{t}</li>)}
+      </ul>
+      <p class="cta"><a class="boton boton--verde" href="/contacto">{p.cta} <Icono nombre="flecha" size={18} /></a></p>
+    </div>
+  </section>
+</Base>
+<style>
+  .etiqueta { font-size: 1.6rem; margin: 0; }
+  .acciones { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.5rem; }
+  .talleres { list-style: none; padding: 0; margin: 1.5rem 0 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: .9rem; }
+  .talleres li { display: flex; gap: .7rem; align-items: center; background: #fff; border: 1px solid var(--borde); border-radius: var(--radio); padding: .9rem 1.1rem; font-weight: 700; color: var(--morado-800); }
+  .talleres :global(.icono) { color: var(--verde-600); flex: none; }
+  .cta { margin-top: 2.5rem; }
+</style>

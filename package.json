@@ -1,0 +1,25 @@
+{
+  "name": "psicologia-sin-estigma",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "cms": "npx decap-server",
+    "validar": "node scripts/validar-contenido.mjs",
+    "build": "npm run validar && astro build && node scripts/optimizar-imagenes.mjs dist/uploads",
+    "preview": "astro preview",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "verificar": "npm run validar && npm test && npm run test:e2e"
+  },
+  "dependencies": {
+    "astro": "^7.4.12",
+    "marked": "^18.2.0",
+    "sharp": "^0.35.5",
+    "yaml": "^2.9.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.1",
+    "vitest": "^5.1.0"
+  }
+}

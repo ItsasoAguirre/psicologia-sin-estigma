@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.astro/
+.env
+# Las referencias originales pesan mucho; las imágenes ya optimizadas están en public/uploads
+referencias/
+test-results/
+playwright-report/

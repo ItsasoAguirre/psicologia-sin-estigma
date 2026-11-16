@@ -1,0 +1,37 @@
+{
+  "personal": "Soy madrileña y vivo en Bizkaia. Desde la adolescencia, he sido y soy activista en distintas causas sociales, porque como diría Lisa Simpson: «¡Todo este maldito sistema está mal!». Es por ello que trabajo desde un enfoque interseccional.\n\nAmo leer, reírme y hacer planes con la gente a la que quiero, aunque también necesito mucho tiempo para mí. Me gusta escribir, los juegos de mesa, soy una friki de identificar pájaros, las cosas kawaii y algunos animales me hacen gritar de ternura. Mis gustos musicales van desde la música electrónica hasta el punk, pasando por el reguetón, entre otros géneros.\n\nDisfruto de estar en la naturaleza y en lugares bonitos, aunque no me entusiasma caminar. Tiendo a sobreestimularme cuando hay muchos sonidos, luces o movimientos. Si paso mucho tiempo sin tomar café en una cafetería acogedora y tranquila, mi espíritu se debilita.",
+  "meme_imagen": "/uploads/lisa.jpg",
+  "formacion": {
+    "titulo": "Formación",
+    "imagen": "/uploads/formacion.jpg",
+    "principal": [
+      "Grado en Psicología, Universidad Autónoma de Madrid.",
+      "Máster en Psicología General Sanitaria, Universidad de Zaragoza."
+    ],
+    "complementaria_titulo": "Formación complementaria",
+    "complementaria": [
+      "Prevención de problemas asociados a los juegos de azar, Universidad Camilo José Cela.",
+      "Identificación y abordaje terapéutico de casos de trauma complejo, Asociación Española del Trauma Psicológico.",
+      "Violencia de Género, AMFORMAD.",
+      "Análisis Funcional aplicado a la intervención clínica, Instituto Terapéutico de Madrid.",
+      "Profundización en la Terapia de Aceptación y Compromiso, Psicoflix.",
+      "Curso online Intervención Contextual en Rumia, TerapiasContextuales.Com.",
+      "Abordaje transdiagnóstico de la imagen corporal, Clínica Cabal.",
+      "Taller de Terapia Centrada en la Compasión (CFT) en ACT y análisis de la conducta, Comunidad ACT."
+    ],
+    "otros_titulo": "Otros",
+    "otros": [
+      "Introducción al Psicodrama, Universidad Autónoma de Madrid.",
+      "Prevención de adicciones y uso saludable de la tecnología, Universidad Camilo José Cela.",
+      "Seminario Internacional contextualización y fundamentos de una psicoterapia feminista, COP Madrid.",
+      "Protección de Datos en Psicología, COP Madrid.",
+      "Jornadas Internacionales en Terapias Contextuales. Análisis y estudio de casos, Ítaca Formación."
+    ]
+  },
+  "foto": "/uploads/captura-de-pantalla-2026-10-16-180435.png",
+  "profesional": "Ejerzo una psicología crítica: no creo que los problemas estén «en la mente» de las personas, sino que son nuestras historias las que nos han moldeado y nos moldean, y aprendemos a reaccionar de determinadas maneras para sobrevivir a ellas.\n\nMi enfoque teórico es el **conductismo**, cuya principal herramienta es el **análisis funcional** (esto me permite entender qué afecta a la persona, cómo responde ante eso y si lo que hace le ayuda o le perjudica a largo plazo).\n\nMe sirvo de las **terapias contextuales**, principalmente de la terapia de aceptación y compromiso (ACT) y la psicoterapia analítica funcional (FAP), orientadas a promover la aceptación de nuestras emociones y pensamientos en el camino hacia lo que es valioso para une misme, entrenando los cambios necesarios en la propia consulta a través del vínculo terapeuta – consultante.\n\nDoy mucha importancia a la **horizontalidad**, tratando de no posicionarme por encima de la persona sino junto a ella.",
+  "profesional_titulo": "En lo profesional",
+  "meme_texto": "«¡Todo este maldito sistema está mal!»",
+  "personal_titulo": "En lo personal",
+  "titulo": "Sobre mí"
+}

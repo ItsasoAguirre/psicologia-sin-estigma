@@ -1,0 +1,865 @@
+# Configuración del panel de edición (Decap CMS).
+# Antes de publicar, cambia `repo` por el repositorio real de GitHub (usuario/nombre).
+# Modo borradores: cada cambio se guarda como borrador con su propia vista previa; «Publicar» lo pone en la web.
+# Para probar el panel en tu ordenador: `npm run cms` y `npm run dev`, y abre http://localhost:4321/admin
+backend:
+  name: github
+  repo: ItsasoAguirre/psicologia-sin-estigma
+  branch: main
+  commit_messages:
+    create: "chore(contenido): crear {{collection}} «{{slug}}»"
+    update: "chore(contenido): actualizar {{collection}} «{{slug}}»"
+    delete: "chore(contenido): borrar {{collection}} «{{slug}}»"
+    uploadMedia: "chore(contenido): subir imagen «{{path}}»"
+    deleteMedia: "chore(contenido): borrar imagen «{{path}}»"
+    openAuthoring: "{{message}}"
+local_backend: true
+locale: es
+site_url: https://psicologiasinestigma.netlify.app
+display_url: https://psicologiasinestigma.netlify.app
+logo_url: /uploads/logo.png
+publish_mode: editorial_workflow
+media_folder: public/uploads
+public_folder: /uploads
+collections:
+  - name: paginas
+    label: Páginas
+    label_singular: Página
+    description: Los textos e imágenes de cada página de la web.
+    editor:
+      preview: false
+    format: json
+    files:
+      - name: inicio
+        label: Inicio
+        file: src/content/paginas/inicio.json
+        fields:
+          - label: Cabecera
+            name: hero
+            widget: object
+            fields:
+              - label: Título grande
+                name: titulo
+                widget: string
+              - label: Texto
+                name: texto
+                widget: text
+              - label: Imagen
+                name: imagen
+                widget: image
+              - label: Texto del botón (lleva a Psicoterapia)
+                name: boton
+                widget: string
+          - label: Valores (fila de iconos)
+            name: valores
+            widget: list
+            summary: "{{fields.texto}}"
+            fields:
+              - label: Icono
+                name: icono
+                widget: select
+                options:
+                  - label: Libro
+                    value: libro
+                  - label: Megáfono
+                    value: megafono
+                  - label: Manos con corazón
+                    value: manos
+                  - label: Persona
+                    value: persona
+                  - label: Portátil
+                    value: portatil
+                  - label: Sillón
+                    value: silla
+                  - label: Sobre (email)
+                    value: email
+                  - label: Bolígrafo
+                    value: boli
+                  - label: Tick
+                    value: check
+                  - label: Corazón
+                    value: corazon
+                  - label: Teléfono
+                    value: telefono
+                  - label: Hoja
+                    value: hoja
+                  - label: Estrella
+                    value: estrella
+                  - label: Reloj
+                    value: reloj
+              - label: Texto
+                name: texto
+                widget: string
+          - label: Newsletter
+            name: newsletter
+            widget: object
+            hint: El formulario se conecta con Brevo en «Ajustes generales → Formulario de la newsletter».
+            fields:
+              - label: Título
+                name: titulo
+                widget: string
+              - label: Texto
+                name: texto
+                widget: text
+              - label: Imagen
+                name: imagen
+                widget: image
+              - label: Texto del botón
+                name: boton
+                widget: string
+              - label: Mensaje al suscribirse
+                name: mensaje_exito
+                widget: string
+          - label: Podcast
+            name: podcast
+            widget: object
+            fields:
+              - label: Título
+                name: titulo
+                widget: string
+              - label: Texto
+                name: texto
+                widget: text
+              - label: Imagen
+                name: imagen
+                widget: image
+              - label: Episodios
+                name: episodios
+                widget: list
+                summary: "{{fields.titulo}}"
+                hint: Pega el enlace de Spotify del episodio (botón Compartir → Copiar enlace). Se mostrará el reproductor automáticamente.
+                fields:
+                  - label: Nombre
+                    name: titulo
+                    widget: string
+                  - label: Enlace de Spotify
+                    name: url
+                    widget: string
+          - label: Bloque de reseñas
+            name: resenas
+            widget: object
+            hint: Las reseñas en sí se editan en el apartado «Reseñas de terapia».
+            fields:
+              - label: Título
+                name: titulo
+                widget: string
+              - label: Texto
+                name: texto
+                widget: string
+              - label: Imagen
+                name: imagen
+                widget: image
+      - name: sobre-mi
+        label: Sobre mí
+        file: src/content/paginas/sobre-mi.json
+        fields:
+          - label: Título
+            name: titulo
+            widget: string
+          - label: Tu foto
+            name: foto
+            widget: image
+            required: false
+            hint: Si la dejas vacía se muestra el logo.
+          - label: Título «En lo personal»
+            name: personal_titulo
+            widget: string
+          - label: Texto personal
+            name: personal
+            widget: markdown
+            modes:
+              - rich_text
+            buttons:
+              - bold
+              - italic
+              - link
+              - bulleted-list
+              - numbered-list
+            editor_components: []
+          - label: Imagen del meme
+            name: meme_imagen
+            widget: image
+            required: false
+          - label: Frase del meme
+            name: meme_texto
+            widget: string
+            required: false
+          - label: Título «En lo profesional»
+            name: profesional_titulo
+            widget: string
+          - label: Texto profesional
+            name: profesional
+            widget: markdown
+            modes:
+              - rich_text
+            buttons:
+              - bold
+              - italic
+              - link
+              - bulleted-list
+              - numbered-list
+            editor_components: []
+          - label: Formación
+            name: formacion
+            widget: object
+            fields:
+              - label: Título
+                name: titulo
+                widget: string
+              - label: Imagen
+                name: imagen
+                widget: image
+              - label: Títulos principales
+                name: principal
+                widget: list
+                field:
+                  label: Título
+                  name: texto
+                  widget: string
+                collapsed: false
+              - label: Título «Formación complementaria»
+                name: complementaria_titulo
+                widget: string
+              - label: Formación complementaria
+                name: complementaria
+                widget: list
+                field:
+                  label: Curso
+                  name: texto
+                  widget: string
+                collapsed: false
+              - label: Título «Otros»
+                name: otros_titulo
+                widget: string
+              - label: Otros
+                name: otros
+                widget: list
+                field:
+                  label: Curso
+                  name: texto
+                  widget: string
+                collapsed: false
+      - name: psicoterapia
+        label: Servicios › Psicoterapia
+        file: src/content/paginas/psicoterapia.json
+        fields:
+          - label: Título
+            name: titulo
+            widget: string
+          - label: Entradilla
+            name: intro
+            widget: text
+          - label: Pistas (desplegable)
+            name: pistas
+            widget: object
+            fields:
+              - label: Texto del desplegable
+                name: boton
+                widget: string
+              - label: Título
+                name: titulo
+                widget: string
+              - label: Imagen
+                name: imagen
+                widget: image
+              - label: Pistas
+                name: lista
+                widget: list
+                field:
+                  label: Pista
+                  name: texto
+                  widget: string
+                collapsed: false
+          - label: ¿Qué te ofrezco?
+            name: ofrezco
+            widget: object
+            fields:
+              - label: Título
+                name: titulo
+                widget: string
+              - label: Puntos
+                name: lista
+                widget: list
+                field:
+                  label: Punto
+                  name: texto
+                  widget: string
+                collapsed: false
+          - label: Modalidad
+            name: modalidad
+            widget: object
+            fields:
+              - label: Título
+                name: titulo
+                widget: string
+              - label: Imagen
+                name: imagen
+                widget: image
+              - label: Opciones
+                name: opciones
+                widget: list
+                summary: "{{fields.texto}}"
+                fields:
+                  - label: Icono
+                    name: icono
+                    widget: select
+                    options:
+                      - label: Libro
+                        value: libro
+                      - label: Megáfono
+                        value: megafono
+                      - label: Manos con corazón
+                        value: manos
+                      - label: Persona
+                        value: persona
+                      - label: Portátil
+                        value: portatil
+                      - label: Sillón
+                        value: silla
+                      - label: Sobre (email)
+                        value: email
+                      - label: Bolígrafo
+                        value: boli
+                      - label: Tick
+                        value: check
+                      - label: Corazón
+                        value: corazon
+                      - label: Teléfono
+                        value: telefono
+                      - label: Hoja
+                        value: hoja
+                      - label: Estrella
+                        value: estrella
+                      - label: Reloj
+                        value: reloj
+                  - label: Texto
+                    name: texto
+                    widget: string
+              - label: Nota sobre tarifas
+                name: nota
+                widget: string
+                required: false
+          - label: Esquema de la intervención (hoja de cuaderno)
+            name: esquema
+            widget: object
+            fields:
+              - label: Título
+                name: titulo
+                widget: string
+              - label: Pasos
+                name: pasos
+                widget: list
+                summary: "{{fields.texto}}"
+                fields:
+                  - label: Icono
+                    name: icono
+                    widget: select
+                    options:
+                      - label: Libro
+                        value: libro
+                      - label: Megáfono
+                        value: megafono
+                      - label: Manos con corazón
+                        value: manos
+                      - label: Persona
+                        value: persona
+                      - label: Portátil
+                        value: portatil
+                      - label: Sillón
+                        value: silla
+                      - label: Sobre (email)
+                        value: email
+                      - label: Bolígrafo
+                        value: boli
+                      - label: Tick
+                        value: check
+                      - label: Corazón
+                        value: corazon
+                      - label: Teléfono
+                        value: telefono
+                      - label: Hoja
+                        value: hoja
+                      - label: Estrella
+                        value: estrella
+                      - label: Reloj
+                        value: reloj
+                  - label: Texto
+                    name: texto
+                    widget: string
+              - label: Nota final
+                name: nota
+                widget: string
+                required: false
+          - label: Sesión informativa gratuita
+            name: sesion_informativa
+            widget: object
+            fields:
+              - label: Texto del botón
+                name: boton
+                widget: string
+              - label: Explicación
+                name: texto
+                widget: text
+          - label: Frase final (enlaza a Contacto)
+            name: cta
+            widget: string
+      - name: asesoramiento
+        label: Servicios › Asesoramiento puntual
+        file: src/content/paginas/asesoramiento.json
+        fields:
+          - label: Título
+            name: titulo
+            widget: string
+          - label: Imagen de fondo
+            name: imagen_fondo
+            widget: image
+            hint: Ocupa toda la página; el texto se coloca a la izquierda.
+          - label: Pregunta destacada
+            name: subtitulo
+            widget: string
+          - label: Texto
+            name: cuerpo
+            widget: markdown
+            modes:
+              - rich_text
+            buttons:
+              - bold
+              - italic
+              - link
+              - bulleted-list
+              - numbered-list
+            editor_components: []
+          - label: Texto del botón (enlaza a Contacto)
+            name: cta
+            widget: string
+      - name: supervisiones
+        label: Servicios › Supervisiones
+        file: src/content/paginas/supervisiones.json
+        fields:
+          - label: Título
+            name: titulo
+            widget: string
+          - label: Imagen
+            name: imagen
+            widget: image
+          - label: Texto
+            name: cuerpo
+            widget: markdown
+            modes:
+              - rich_text
+            buttons:
+              - bold
+              - italic
+              - link
+              - bulleted-list
+              - numbered-list
+            editor_components: []
+          - label: Modalidad
+            name: modalidad
+            widget: object
+            fields:
+              - label: Título
+                name: titulo
+                widget: string
+              - label: Opciones
+                name: opciones
+                widget: list
+                summary: "{{fields.texto}}"
+                fields:
+                  - label: Icono
+                    name: icono
+                    widget: select
+                    options:
+                      - label: Libro
+                        value: libro
+                      - label: Megáfono
+                        value: megafono
+                      - label: Manos con corazón
+                        value: manos
+                      - label: Persona
+                        value: persona
+                      - label: Portátil
+                        value: portatil
+                      - label: Sillón
+                        value: silla
+                      - label: Sobre (email)
+                        value: email
+                      - label: Bolígrafo
+                        value: boli
+                      - label: Tick
+                        value: check
+                      - label: Corazón
+                        value: corazon
+                      - label: Teléfono
+                        value: telefono
+                      - label: Hoja
+                        value: hoja
+                      - label: Estrella
+                        value: estrella
+                      - label: Reloj
+                        value: reloj
+                  - label: Texto
+                    name: texto
+                    widget: string
+              - label: Nota sobre tarifas
+                name: nota
+                widget: string
+                required: false
+          - label: Sesión informativa gratuita
+            name: sesion_informativa
+            widget: object
+            fields:
+              - label: Texto del botón
+                name: boton
+                widget: string
+              - label: Explicación
+                name: texto
+                widget: text
+          - label: Frase final (enlaza a Contacto)
+            name: cta
+            widget: string
+      - name: actividades-grupales
+        label: Servicios › Actividades grupales
+        file: src/content/paginas/actividades-grupales.json
+        fields:
+          - label: Título
+            name: titulo
+            widget: string
+          - label: Imagen
+            name: imagen
+            widget: image
+          - label: Texto
+            name: intro
+            widget: markdown
+            modes:
+              - rich_text
+            buttons:
+              - bold
+              - italic
+              - link
+              - bulleted-list
+              - numbered-list
+            editor_components: []
+          - label: Título de la lista de talleres
+            name: talleres_titulo
+            widget: string
+          - label: Talleres
+            name: talleres
+            widget: list
+            field:
+              label: Taller
+              name: texto
+              widget: string
+            collapsed: false
+          - label: Texto del botón (enlaza a Contacto)
+            name: cta
+            widget: string
+      - name: retiros
+        label: Servicios › Retiros
+        file: src/content/paginas/retiros.json
+        fields:
+          - label: Título
+            name: titulo
+            widget: string
+          - label: Imagen de portada
+            name: imagen
+            widget: image
+          - label: Tipos de retiro
+            name: tipos
+            widget: list
+            summary: "{{fields.titulo}}"
+            fields:
+              - label: Título
+                name: titulo
+                widget: string
+              - label: Texto
+                name: texto
+                widget: markdown
+                modes:
+                  - rich_text
+                buttons:
+                  - bold
+                  - italic
+                  - link
+                  - bulleted-list
+                  - numbered-list
+                editor_components: []
+          - label: Título de la galería
+            name: galeria_titulo
+            widget: string
+          - label: Fotos de retiros anteriores (van pasando solas)
+            name: fotos
+            widget: list
+            field:
+              label: Foto
+              name: foto
+              widget: image
+            collapsed: false
+          - label: Título de las reseñas
+            name: resenas_titulo
+            widget: string
+          - label: Reseñas por año (fotos)
+            name: resenas
+            widget: list
+            summary: "{{fields.titulo}}"
+            fields:
+              - label: Año o título
+                name: titulo
+                widget: string
+              - label: Fotos de las reseñas
+                name: imagenes
+                widget: list
+                field:
+                  label: Foto
+                  name: imagen
+                  widget: image
+                collapsed: false
+          - label: Texto final
+            name: cierre
+            widget: markdown
+            modes:
+              - rich_text
+            buttons:
+              - bold
+              - italic
+              - link
+              - bulleted-list
+              - numbered-list
+            editor_components: []
+          - label: Texto del botón (enlaza a Contacto)
+            name: cta
+            widget: string
+      - name: recursos-pagina
+        label: Recursos (cabecera)
+        file: src/content/paginas/recursos.json
+        fields:
+          - label: Título
+            name: titulo
+            widget: string
+          - label: Imagen
+            name: imagen
+            widget: image
+          - label: Texto
+            name: intro
+            widget: markdown
+            modes:
+              - rich_text
+            buttons:
+              - bold
+              - italic
+              - link
+              - bulleted-list
+              - numbered-list
+            editor_components: []
+      - name: contacto
+        label: Contacto
+        file: src/content/paginas/contacto.json
+        fields:
+          - label: Título
+            name: titulo
+            widget: string
+          - label: Texto
+            name: intro
+            widget: text
+          - label: Título del formulario
+            name: formulario_titulo
+            widget: string
+      - name: privacidad
+        label: Política de privacidad
+        file: src/content/paginas/privacidad.json
+        fields:
+          - label: Título
+            name: titulo
+            widget: string
+          - label: Texto
+            name: cuerpo
+            widget: markdown
+            modes:
+              - rich_text
+            buttons:
+              - bold
+              - italic
+              - link
+              - bulleted-list
+              - numbered-list
+            editor_components: []
+      - name: aviso-legal
+        label: Aviso legal
+        file: src/content/paginas/aviso-legal.json
+        fields:
+          - label: Título
+            name: titulo
+            widget: string
+          - label: Texto
+            name: cuerpo
+            widget: markdown
+            modes:
+              - rich_text
+            buttons:
+              - bold
+              - italic
+              - link
+              - bulleted-list
+              - numbered-list
+            editor_components: []
+  - name: resenas
+    label: Reseñas de terapia
+    label_singular: Reseña
+    description: Aparecen como pósits en la página de inicio. Se ordenan por el número de «Orden».
+    folder: src/content/resenas
+    extension: json
+    format: json
+    create: true
+    delete: true
+    editor:
+      preview: false
+    identifier_field: nombre
+    slug: "{{nombre}}"
+    summary: "{{orden}}. {{nombre}}"
+    sortable_fields:
+      - orden
+      - nombre
+    fields:
+      - label: Nombre (o «Anónima»)
+        name: nombre
+        widget: string
+      - label: Reseña
+        name: texto
+        widget: markdown
+        modes:
+          - rich_text
+        buttons:
+          - bold
+          - italic
+          - link
+          - bulleted-list
+          - numbered-list
+        editor_components: []
+      - label: Orden
+        name: orden
+        widget: number
+        value_type: int
+        default: 99
+      - label: Publicada
+        name: publicada
+        widget: boolean
+        default: true
+        hint: Desactívalo para ocultarla sin borrarla.
+  - name: recursos
+    label: Recursos
+    label_singular: Recurso
+    description: Libros, artículos, vídeos, guías… que aparecen en la página Recursos.
+    folder: src/content/recursos
+    extension: json
+    format: json
+    create: true
+    delete: true
+    editor:
+      preview: false
+    identifier_field: titulo
+    slug: "{{titulo}}"
+    summary: "{{orden}}. {{titulo}} ({{tipo}})"
+    sortable_fields:
+      - orden
+      - titulo
+      - tipo
+    fields:
+      - label: Título
+        name: titulo
+        widget: string
+      - label: Tipo
+        name: tipo
+        widget: select
+        options:
+          - Libro
+          - Artículo
+          - Vídeo
+          - Podcast
+          - Guía
+          - Web
+          - Otro
+        hint: Sirve para los filtros de la página.
+      - label: Descripción
+        name: descripcion
+        widget: markdown
+        modes:
+          - rich_text
+        buttons:
+          - bold
+          - italic
+          - link
+          - bulleted-list
+          - numbered-list
+        editor_components: []
+        required: false
+      - label: Enlace
+        name: enlace
+        widget: string
+        required: false
+      - label: Imagen
+        name: imagen
+        widget: image
+        required: false
+      - label: Orden
+        name: orden
+        widget: number
+        value_type: int
+        default: 99
+      - label: Publicado
+        name: publicado
+        widget: boolean
+        default: true
+  - name: ajustes
+    label: Ajustes generales
+    description: Datos de contacto, redes sociales y formularios. Se usan en toda la web.
+    editor:
+      preview: false
+    format: json
+    files:
+      - name: general
+        label: Datos de contacto y formularios
+        file: src/content/ajustes/general.json
+        fields:
+          - label: Nombre de la web
+            name: nombre
+            widget: string
+          - label: Logo
+            name: logo
+            widget: image
+          - label: Descripción para Google
+            name: descripcion
+            widget: text
+            hint: Frase corta que aparece en los resultados de búsqueda.
+          - label: Correo electrónico
+            name: email
+            widget: string
+          - label: Teléfono
+            name: telefono
+            widget: string
+            required: false
+          - label: Horario de llamadas
+            name: horario
+            widget: string
+            required: false
+          - label: Usuario de Instagram
+            name: instagram_usuario
+            widget: string
+            required: false
+          - label: Enlace de Instagram
+            name: instagram_url
+            widget: string
+            required: false
+          - label: Número de colegiada
+            name: colegiada
+            widget: string
+          - label: Formulario de la newsletter (Brevo)
+            name: brevo_newsletter
+            widget: text
+            required: false
+            hint: "En Brevo: Contactos → Formularios → abre tu formulario de suscripción → Compartir → «Código HTML» (o «Insertar») y pega aquí TODO el código. La web usa su propio diseño y envía los datos a ese formulario. Si el formulario de Brevo tiene captcha, desactívalo."
+          - label: Formulario de contacto (Brevo)
+            name: brevo_contacto
+            widget: text
+            required: false
+            hint: Igual que el anterior, pero con el formulario de contacto. Si lo dejas vacío se muestra tu correo.
+show_preview_links: true

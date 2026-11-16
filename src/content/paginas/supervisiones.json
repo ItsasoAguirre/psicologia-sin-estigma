@@ -1,0 +1,24 @@
+{
+  "titulo": "Supervisiones",
+  "imagen": "/uploads/supervision.jpg",
+  "cuerpo": "Espacio para supervisar casos, especialmente para psicos principiantes y/o que deseen una mirada conductual-contextual, junto a un enfoque interseccional.\n\nJuntes valoraremos qué funciona y qué nuevos caminos podrían mejorar una intervención, así como también detectar y desaprender posibles estereotipos y creencias que hemos podido interiorizar sobre distintos temas, de manera que el espacio terapéutico sea lo más seguro posible para les consultantes, según las distintas realidades que les atraviesan.\n\nPuedes solicitar sesiones puntuales o periódicas.",
+  "modalidad": {
+    "titulo": "Modalidad",
+    "opciones": [
+      {
+        "icono": "portatil",
+        "texto": "Online"
+      },
+      {
+        "icono": "silla",
+        "texto": "En tu propia consulta (solo Bizkaia, consultar zona)"
+      }
+    ],
+    "nota": "Distintas tarifas según modalidad."
+  },
+  "sesion_informativa": {
+    "boton": "Solicitar sesión informativa gratuita",
+    "texto": "Te ofrezco hacer una videollamada o sesión telefónica de aprox. 10-15 minutos para solucionar dudas, ponernos cara y dar más información sobre cuál es mi forma de trabajar y la dinámica de las supervisiones. El objetivo es que te sirva para decidir, pero no te preocupes, no conlleva ningún compromiso."
+  },
+  "cta": "Solicita la sesión informativa, consulta tarifas o ¡reserva tu cita!"
+}

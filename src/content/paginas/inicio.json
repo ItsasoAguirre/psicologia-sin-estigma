@@ -1,0 +1,53 @@
+{
+  "hero": {
+    "titulo": "Psicoterapia online con perspectiva interseccional",
+    "texto": "Te acompaño a sentirte mejor en un lugar lo más seguro posible, sin perder de vista las raíces sociales de los malestares individuales.",
+    "imagen": "/uploads/laptop.jpg",
+    "boton": "Más información"
+  },
+  "valores": [
+    {
+      "icono": "libro",
+      "texto": "Evidencia científica"
+    },
+    {
+      "icono": "megafono",
+      "texto": "Feminismo transinclusivo, antirracista y anticapacitista"
+    },
+    {
+      "icono": "manos",
+      "texto": "LGTBIQA+ friendly"
+    },
+    {
+      "icono": "persona",
+      "texto": "Enfoque neuroafirmativo"
+    }
+  ],
+  "newsletter": {
+    "titulo": "Newsletter",
+    "texto": "Apúntate para recibir novedades, recursos y las próximas actividades grupales y retiros.",
+    "imagen": "/uploads/newsletter.png",
+    "boton": "Suscribirme",
+    "mensaje_exito": "¡Gracias! Revisa tu correo para confirmar la suscripción."
+  },
+  "podcast": {
+    "titulo": "Podcast",
+    "texto": "Podcast sobre las raíces sociales del malestar y cómo aplicar una mirada interseccional fuera y dentro de terapia.",
+    "imagen": "/uploads/podcast.jpg",
+    "episodios": [
+      {
+        "titulo": "Parte 1",
+        "url": "https://open.spotify.com/episode/54kefDZXojTIH2VAEJdNSP"
+      },
+      {
+        "titulo": "Parte 2",
+        "url": "https://open.spotify.com/episode/3cgphMTkKEzZolRxrgTGTi"
+      }
+    ]
+  },
+  "resenas": {
+    "titulo": "Lo que cuentan quienes han pasado por terapia",
+    "texto": "Pulsa en cada nota para leer la reseña completa.",
+    "imagen": "/uploads/feedback.png"
+  }
+}

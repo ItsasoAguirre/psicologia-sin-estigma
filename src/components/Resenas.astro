@@ -1,0 +1,75 @@
+---
+// Reseñas como pósits: al pulsar uno se abre la reseña completa en una hoja de cuaderno.
+import Icono from './Icono.astro';
+import { resenas, md, extracto } from '../lib/datos.js';
+const colores = ['amarillo', 'rosa', 'lila', 'verde', 'azul'];
+const giros = [-2.5, 1.8, -1.2, 2.4, -1.8, 1.2];
+---
+<ul class="posits">
+  {resenas.map((r, i) => (
+    <li>
+      <button class={`posit posit--${colores[i % colores.length]}`} style={`--giro:${giros[i % giros.length]}deg`} data-resena={i} aria-haspopup="dialog">
+        <span class="posit__nombre">{r.nombre}</span>
+        <span class="posit__extracto">{extracto(r.texto)}</span>
+        <span class="posit__leer">Leer reseña</span>
+      </button>
+    </li>
+  ))}
+</ul>
+
+<dialog class="resena-dialogo" aria-labelledby="resena-nombre">
+  <button class="resena-dialogo__cerrar" aria-label="Cerrar"><Icono nombre="cerrar" /></button>
+  {resenas.map((r, i) => (
+    <template data-resena={i}>
+      <div class="cuaderno resena-dialogo__hoja">
+        <p class="resena-dialogo__titulo" id="resena-nombre">Reseña de {r.nombre}</p>
+        <Fragment set:html={md(r.texto)} />
+        <p class="resena-dialogo__firma">— {r.nombre}</p>
+      </div>
+    </template>
+  ))}
+  <div class="resena-dialogo__contenido"></div>
+</dialog>
+
+<script>
+  const dialogo = document.querySelector<HTMLDialogElement>('.resena-dialogo');
+  const contenido = dialogo?.querySelector('.resena-dialogo__contenido');
+  document.querySelectorAll<HTMLButtonElement>('.posit').forEach((b) => b.addEventListener('click', () => {
+    const t = dialogo?.querySelector<HTMLTemplateElement>(`template[data-resena="${b.dataset.resena}"]`);
+    if (!t || !contenido || !dialogo) return;
+    contenido.replaceChildren(t.content.cloneNode(true));
+    dialogo.showModal();
+    dialogo.scrollTop = 0;
+  }));
+  dialogo?.querySelector('.resena-dialogo__cerrar')?.addEventListener('click', () => dialogo.close());
+  dialogo?.addEventListener('click', (e) => { if (e.target === dialogo) dialogo.close(); });
+</script>
+
+<style>
+  .posits { list-style: none; padding: 0; margin: 2.5rem 0 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.75rem; }
+  .posit {
+    --c: #fff3a8; width: 100%; aspect-ratio: 1; display: flex; flex-direction: column; text-align: left; gap: .4rem;
+    padding: 1.4rem 1.1rem 1rem; border: 0; cursor: pointer; background: var(--c); color: #2f2840;
+    font: inherit; border-radius: 2px 2px 18px 2px; rotate: var(--giro);
+    box-shadow: 0 1px 1px rgba(0,0,0,.08), 0 12px 18px -10px rgba(40, 20, 70, .35);
+    transition: rotate .25s, translate .25s, box-shadow .25s; position: relative;
+  }
+  .posit::before { content: ''; position: absolute; top: -10px; left: 50%; translate: -50% 0; width: 70px; height: 20px; background: rgba(255,255,255,.55); box-shadow: 0 1px 2px rgba(0,0,0,.08); rotate: -2deg; }
+  .posit:hover, .posit:focus-visible { rotate: 0deg; translate: 0 -4px; box-shadow: 0 1px 1px rgba(0,0,0,.08), 0 18px 26px -12px rgba(40, 20, 70, .45); }
+  .posit--rosa { --c: #ffd3e2; } .posit--lila { --c: #e6d8fb; } .posit--verde { --c: #cdeedd; } .posit--azul { --c: #d3e7fb; }
+  .posit__nombre { font-family: var(--f-mano); font-size: 2rem; line-height: 1; font-weight: 700; color: var(--morado-800); }
+  .posit__extracto { font-size: .92rem; line-height: 1.45; color: #4a4258; flex: 1; overflow: hidden; }
+  .posit__leer { font-size: .85rem; font-weight: 700; color: var(--morado-700); text-decoration: underline; text-underline-offset: 3px; }
+
+  .resena-dialogo { border: 0; padding: 0; background: transparent; width: min(720px, 100% - 1.5rem); max-height: 88vh; overflow: auto; }
+  .resena-dialogo::backdrop { background: rgba(36, 16, 70, .6); backdrop-filter: blur(3px); }
+  .resena-dialogo__cerrar { position: sticky; top: .5rem; float: right; margin: .5rem .5rem -3rem 0; z-index: 2; width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--morado-700); color: #fff; display: grid; place-items: center; cursor: pointer; }
+  .resena-dialogo__hoja { padding-top: 2rem; }
+  .resena-dialogo__titulo { font-family: var(--f-mano); font-size: 2.2rem; color: var(--morado-700); }
+  .resena-dialogo__firma { text-align: right; font-family: var(--f-mano); font-size: 1.8rem; color: var(--morado-700); }
+  @media (max-width: 560px) {
+    .posits { grid-template-columns: repeat(2, 1fr); gap: 1.1rem; }
+    .posit__extracto { display: none; }
+    .posit { aspect-ratio: 1.1; }
+  }
+</style>

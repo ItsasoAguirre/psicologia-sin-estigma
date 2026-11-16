@@ -1,0 +1,60 @@
+{
+  "titulo": "Retiros",
+  "imagen": "/uploads/retiros1.jpg",
+  "tipos": [
+    {
+      "titulo": "Para todos los públicos",
+      "texto": "El objetivo es descansar, vincular con otras personas y hacer actividades que nos aporten bienestar pero que también nos ayuden a cuidar a les demás y a entender y cambiar el mundo en que vivimos, para hacerlo más habitable.\n\nDurante esos días, en un entorno natural, aprendemos, cuidamos y somos cuidades en comunidad."
+    },
+    {
+      "titulo": "Para profesionales",
+      "texto": "Para psicos o cualquier profesional que se dedique a cuidar y necesite espacios propios para expresarse, compartir y descansar."
+    },
+    {
+      "titulo": "Adaptados a ti o a tu grupo",
+      "texto": "Si lo que quieres es realizar un retiro en un lugar concreto, para un grupo determinado y/o sobre algún tema o temas en cuestión, te lo organizo basándome en tus ideas y necesidades."
+    }
+  ],
+  "galeria_titulo": "En anteriores retiros…",
+  "fotos": [
+    "/uploads/retiros/retiro-01.jpg",
+    "/uploads/retiros/retiro-02.jpg",
+    "/uploads/retiros/retiro-03.jpg",
+    "/uploads/retiros/retiro-04.jpg",
+    "/uploads/retiros/retiro-05.jpg",
+    "/uploads/retiros/retiro-06.jpg",
+    "/uploads/retiros/retiro-07.jpg",
+    "/uploads/retiros/retiro-08.jpg",
+    "/uploads/retiros/retiro-09.jpg",
+    "/uploads/retiros/retiro-10.jpg",
+    "/uploads/retiros/retiro-11.jpg",
+    "/uploads/retiros/retiro-12.jpg",
+    "/uploads/retiros/retiro-13.jpg"
+  ],
+  "resenas_titulo": "Lo que nos dejasteis escrito",
+  "resenas": [
+    {
+      "titulo": "2026",
+      "imagenes": [
+        "/uploads/resenas-retiros/2026-1.jpg",
+        "/uploads/resenas-retiros/2026-2.jpg",
+        "/uploads/resenas-retiros/2026-3.jpg",
+        "/uploads/resenas-retiros/2026-4.jpg",
+        "/uploads/resenas-retiros/2026-5.jpg"
+      ]
+    },
+    {
+      "titulo": "2024",
+      "imagenes": [
+        "/uploads/resenas-retiros/2024-1.jpg",
+        "/uploads/resenas-retiros/2024-2.jpg",
+        "/uploads/resenas-retiros/2024-3.jpg",
+        "/uploads/resenas-retiros/2024-4.jpg",
+        "/uploads/resenas-retiros/2024-5.jpg",
+        "/uploads/resenas-retiros/2024-6.jpg"
+      ]
+    }
+  ],
+  "cierre": "Si te apetece unirte al siguiente pero aún no hay fecha, escríbenos a [psicologiasinestigma@cop.es](mailto:psicologiasinestigma@cop.es) para avisarte cuando surja (apuntarte a la lista para que te avisemos no te compromete a nada).\n\n¿Quieres un retiro adaptado? ¡Me comentas tus ideas y te mando mi propuesta sin compromiso!",
+  "cta": "Solicitar un retiro adaptado"
+}

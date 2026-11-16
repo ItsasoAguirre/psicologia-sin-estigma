@@ -1,0 +1,68 @@
+---
+import Base from '../layouts/Base.astro';
+import Icono from '../components/Icono.astro';
+import { pagina, recursos, md } from '../lib/datos.js';
+const p = pagina('recursos');
+const tipos = [...new Set(recursos.map((r) => r.tipo).filter(Boolean))];
+---
+<Base titulo={p.titulo}>
+  <section class="seccion">
+    <div class="contenedor dos-col">
+      <div>
+        <h1>{p.titulo}</h1>
+        <div class="prosa intro" set:html={md(p.intro)} />
+      </div>
+      <img class="ilustracion recursos__img" src={p.imagen} alt="" width="400" height="700" />
+    </div>
+  </section>
+
+  <section class="seccion seccion--lila">
+    <div class="contenedor">
+      {tipos.length > 1 && (
+        <div class="filtros" role="group" aria-label="Filtrar recursos">
+          <button class="filtro" aria-pressed="true" data-tipo="">Todos</button>
+          {tipos.map((t) => <button class="filtro" aria-pressed="false" data-tipo={t}>{t}</button>)}
+        </div>
+      )}
+      <ul class="tarjetas">
+        {recursos.map((r) => (
+          <li class="tarjeta" data-tipo={r.tipo}>
+            {r.imagen && <img src={r.imagen} alt="" loading="lazy" width="400" height="260" />}
+            <div class="tarjeta__cuerpo">
+              {r.tipo && <span class="tarjeta__tipo">{r.tipo}</span>}
+              <h2>{r.titulo}</h2>
+              {r.descripcion && <div class="prosa" set:html={md(r.descripcion)} />}
+              {r.enlace && <a class="tarjeta__enlace" href={r.enlace} target="_blank" rel="noopener">Abrir recurso <Icono nombre="enlace" size={16} /></a>}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const botones = document.querySelectorAll<HTMLButtonElement>('.filtro');
+  botones.forEach((b) => b.addEventListener('click', () => {
+    botones.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    document.querySelectorAll<HTMLElement>('.tarjeta').forEach((t) => {
+      t.hidden = !!b.dataset.tipo && t.dataset.tipo !== b.dataset.tipo;
+    });
+  }));
+</script>
+
+<style>
+  .intro { font-size: 1.15rem; }
+  .recursos__img { max-height: 360px; }
+  .filtros { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.75rem; }
+  .filtro { font: inherit; font-weight: 700; padding: .5rem 1rem; border-radius: 999px; border: 2px solid var(--morado-700); background: #fff; color: var(--morado-700); cursor: pointer; }
+  .filtro[aria-pressed='true'] { background: var(--morado-700); color: #fff; }
+  .tarjetas { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+  .tarjeta { background: #fff; border-radius: var(--radio-lg); overflow: hidden; box-shadow: var(--sombra); display: flex; flex-direction: column; }
+  .tarjeta img { aspect-ratio: 16 / 10; object-fit: cover; width: 100%; }
+  .tarjeta__cuerpo { padding: 1.25rem 1.4rem 1.5rem; display: flex; flex-direction: column; flex: 1; }
+  .tarjeta h2 { font-size: 1.2rem; margin: .4rem 0 .5rem; }
+  .tarjeta .prosa { font-size: .98rem; color: var(--texto-suave); }
+  .tarjeta__tipo { align-self: flex-start; font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--verde-800); background: var(--verde-50); padding: .2rem .6rem; border-radius: 999px; }
+  .tarjeta__enlace { margin-top: auto; padding-top: .75rem; font-weight: 700; display: inline-flex; gap: .35rem; align-items: center; }
+</style>

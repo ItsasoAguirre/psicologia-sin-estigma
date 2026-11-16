@@ -1,0 +1,31 @@
+---
+import Base from '../../layouts/Base.astro';
+import Modalidad from '../../components/Modalidad.astro';
+import SesionInformativa from '../../components/SesionInformativa.astro';
+import { pagina, md } from '../../lib/datos.js';
+const p = pagina('supervisiones');
+---
+<Base titulo={p.titulo}>
+  <section class="seccion">
+    <div class="contenedor dos-col arriba">
+      <div>
+        <p class="mano etiqueta">Servicios</p>
+        <h1>{p.titulo}</h1>
+        <div class="prosa" set:html={md(p.cuerpo)} />
+      </div>
+      <img class="foto" src={p.imagen} alt="" width="700" height="500" />
+    </div>
+  </section>
+  <section class="seccion seccion--lila">
+    <div class="contenedor estrecho">
+      <Modalidad {...p.modalidad} />
+    </div>
+  </section>
+  <section class="contenedor estrecho">
+    <SesionInformativa {...p.sesion_informativa} cta={p.cta} />
+  </section>
+</Base>
+<style>
+  .etiqueta { font-size: 1.6rem; margin: 0; }
+  .arriba { align-items: start; }
+</style>
