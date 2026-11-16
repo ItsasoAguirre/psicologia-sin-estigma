@@ -6,3 +6,6 @@ dist/
 referencias/
 test-results/
 playwright-report/
+# Copias para otros agentes que genera autoskills (se usa solo .claude/skills)
+.agents/
+skills-lock.json

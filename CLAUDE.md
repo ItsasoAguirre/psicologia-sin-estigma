@@ -16,8 +16,14 @@ Web estática (Astro) editada por su dueña, sin conocimientos técnicos, desde 
 ## Skills del proyecto (`.claude/skills/`)
 
 - `verificar-cambios` (propia) + subagente `revisor-contenido`: revisión de cambios de contenido.
-- `frontend-design` (Anthropic, Apache 2.0): criterios de diseño visual.
-- `astro` (astrolicious/agent-skills, MIT): referencia de Astro; consulta siempre docs.astro.build.
+- `frontend-design` (Anthropic): criterios de diseño visual.
+- `astro` (astrolicious): referencia de Astro; consulta siempre docs.astro.build.
+- `accessibility`, `seo` (addyosmani/web-quality-skills): WCAG 2.2 y posicionamiento.
+- `playwright-best-practices` (currents-dev), `vitest` (antfu): tests.
+- `nodejs-best-practices`, `nodejs-backend-patterns`: genéricas de Node. Este proyecto no tiene
+  servidor; lo dicho arriba sobre la web estática prevalece sobre ellas.
+
+Instaladas con `npx autoskills` (solo se versiona `.claude/skills/`).
 
 ## Comandos
 
