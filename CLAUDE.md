@@ -20,7 +20,8 @@ Web estática (Astro) editada por su dueña, sin conocimientos técnicos, desde 
 - `verificar-cambios` (propia) + subagente `revisor-contenido`: revisión de cambios de contenido.
 - `frontend-design` (Anthropic): criterios de diseño visual.
 - `astro` (astrolicious): referencia de Astro; consulta siempre docs.astro.build.
-- `accessibility`, `seo` (addyosmani/web-quality-skills): WCAG 2.2 y posicionamiento.
+- `accessibility`, `seo`, `core-web-vitals` (addyosmani/web-quality-skills): WCAG 2.2, posicionamiento
+  y rendimiento (LCP, INP, CLS).
 - `playwright-best-practices` (currents-dev), `vitest` (antfu): tests.
 - `nodejs-best-practices`, `nodejs-backend-patterns`: genéricas de Node. Este proyecto no tiene
   servidor; lo dicho arriba sobre la web estática prevalece sobre ellas.
